@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="css/eph-responsive.css" />
 </head>
 <body>
-<div id="eph-preloader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 999999; display: flex; align-items: center; justify-content: center; transition: opacity 0.4s ease, visibility 0.4s ease;">
+<div id="eph-preloader" class="preloader-overlay">
    <div class="loader"></div>
   </div>
 <section id="panel">
@@ -28,12 +28,12 @@
   </div>
   <img src="logobaru.png" alt="Ikon WikiJelajah" id="branding-icon" class="efeklogo">
 </header>
- <section id="landing" class="panel-content" data-display="flex" style="flex-direction: column; padding: 17px 20px 75px; gap: 15px;">
-    <h2 style="margin: 0;">Mulai Eksplorasi</h2>
+ <section id="landing" class="panel-content" data-display="flex">
+    <h2>Mulai Eksplorasi</h2>
     
     <!-- 1. KATEGORI WILAYAH UTAMA -->
-    <label for="kategori-wilayah-utama" style="font-weight: bold;">Tentukan Wilayah:</label>
-    <select id="kategori-wilayah-utama" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%;" onchange="aturTampilanWilayah()">
+    <label for="kategori-wilayah-utama">Tentukan Wilayah:</label>
+    <select id="kategori-wilayah-utama" class="form-input-kustom" onchange="aturTampilanWilayah()">
       <option value="provinsi" selected>Provinsi di Indonesia</option>
       <option value="all">Seluruh Indonesia</option>
       <option value="luar_negeri">Luar Negeri</option>
@@ -41,8 +41,8 @@
 
     <!-- 2. WADAH PROVINSI (Hanya muncul jika "Provinsi di Indonesia" dipilih) -->
     <div id="wadah-provinsi">
-      <label for="provinsi-input" style="font-weight: bold;">Pilih Provinsi:</label><br>
-      <select id="provinsi-input" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; margin-top: 15px;" onchange="if(typeof aturTampilanNegara === 'function') aturTampilanNegara();">
+      <label for="provinsi-input">Pilih Provinsi:</label><br>
+      <select id="provinsi-input" class="form-input-kustom mt-15" onchange="if(typeof aturTampilanNegara === 'function') aturTampilanNegara();">
         <option value="wd:Q1823">Aceh</option>
         <option value="wd:Q3125978">Bali</option>
         <option value="wd:Q3540">Banten</option>
@@ -85,9 +85,9 @@
     </div>
 
     <!-- 3. WADAH LUAR NEGERI (Hanya muncul jika "Luar Negeri" dipilih) -->
-    <div id="wadah-luar-negeri" style="display: none;">
-      <label for="benua-input" style="font-weight: bold;">Pilih Benua:</label><br>
-      <select id="benua-input" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; margin-top: 15px; margin-bottom: 15px;" onchange="filterNegaraByBenua()">
+    <div id="wadah-luar-negeri" class="d-none">
+      <label for="benua-input">Pilih Benua:</label><br>
+      <select id="benua-input" class="form-input-kustom my-15" onchange="filterNegaraByBenua()">
         <option value="eropa">Eropa</option>
         <option value="asia">Asia</option>
         <option value="afrika">Afrika</option>
@@ -95,8 +95,8 @@
         <option value="oseania">Oseania</option>
       </select>
 
-      <label for="negara-input" style="font-weight: bold;">Pilih Negara:</label><br>
-      <select id="negara-input" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; margin-top: 15px;">
+      <label for="negara-input">Pilih Negara:</label><br>
+      <select id="negara-input" class="form-input-kustom mt-15">
         <!-- EROPA -->
         <option value="wd:Q222" data-benua="eropa">Albania</option>
         <option value="wd:Q228" data-benua="eropa">Andorra</option>
@@ -304,14 +304,14 @@
       </select>
     </div>
     
-    <label for="jenis-dropdown" style="font-weight: bold;">Pilih Kategori Data:</label>
+    <label for="jenis-dropdown">Pilih Kategori Data:</label>
     
-<select id="jenis-dropdown" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-      <option disabled selected style="font-weight: bold; color: black;" value="wd:">Contoh</option>
+    <select id="jenis-dropdown" class="form-input-kustom">
+      <option disabled selected value="wd:">Contoh</option>
       <option value="wd:Q3199141 wd:Q3191695">Kabupaten & kota</option>
       <option value="wd:Q5" data-lokasi="P19" data-tahun="P569">Tempat lahir tokoh</option>
 
-      <option disabled style="font-weight: bold; color: black;">Budaya</option>
+      <option disabled>Budaya</option>
       <option value="wd:Q34770" data-kategori="alam" data-lokasi="P2341">Bahasa</option>
       <option value="wd:Q36192" data-kategori="alam" data-lokasi="P276">Budaya rakyat</option>
       <option value="wd:Q19861951 wd:Q746549 wd:Q2095 wd:Q8195619" data-kategori="alam" data-lokasi="P276">Hidangan</option>
@@ -319,7 +319,7 @@
       <option value="wd:Q189819 wd:Q2627975" data-kategori="alam" data-lokasi="P276">Ritual dan upacara</option>
       <option value="wd:Q107357104 wd:Q184485" data-kategori="alam" data-lokasi="P276">Tari dan pertunjukan</option>
       
-      <option disabled style="font-weight: bold; color: black;">Tempat ibadah</option>
+      <option disabled>Tempat ibadah</option>
       <option value="wd:Q32815 wd:Q56235676 wd:Q56235673 wd:Q1454820">Masjid</option>
       <option value="wd:Q16970 wd:Q2977 wd:Q56242215">Gereja & katedral</option>
       <option value="wd:Q44539 wd:Q2736554 wd:Q842402 wd:Q3124902">Kuil & candi</option>
@@ -328,7 +328,7 @@
       <option value="wd:Q11032 wd:Q41298" data-lokasi="P291" data-tahun="P577">Media massa</option>
       <option value="wd:Q33506">Museum</option>
       
-      <option disabled style="font-weight: bold; color: black;">Peninggalan sejarah</option>
+      <option disabled>Peninggalan sejarah</option>
       <option value="wd:Q220659 wd:Q860861 wd:Q193475" data-lokasi="P276">Artefak</option>
       <option value="wd:Q57821 wd:Q1785071 wd:Q91122">Benteng dan bunker</option>
       <option value="wd:Q178743 wd:Q860861">Prasasti</option>
@@ -337,7 +337,7 @@
       <option value="wd:Q137894610 wd:Q35112127 wd:Q4246737 wd:Q19860854 wd:Q109607">Bangunan bersejarah lainnya</option>
       <option value="wd:Q41176 wd:Q811979">Bangunan secara umum dan struktur arsitektur</option>
       
-      <option disabled style="font-weight: bold; color: black;">Bangunan/tempat</option>
+      <option disabled>Bangunan/tempat</option>
       <option value="wd:Q27686 wd:Q875157">Hotel dan resor</option>
       <option value="wd:Q16560 wd:Q481289">Istana</option>
       <option value="wd:Q43501 wd:Q167346" data-kategori="alam">Kebun binatang & tanaman</option>
@@ -349,13 +349,13 @@
       <option value="wd:Q483110 wd:Q2310214">Stadion & lapangan olahraga</option>
       <option value="wd:Q3918 wd:Q38723">Universitas & kampus</option>
       
-      <option disabled style="font-weight: bold; color: black;">Transportasi</option>
+      <option disabled>Transportasi</option>
       <option value="wd:Q1248784">Bandar udara</option>
       <option value="wd:Q44782">Pelabuhan</option>
       <option value="wd:Q55488">Stasiun kereta api</option>
       <option value="wd:Q494829">Terminal bus</option>
       
-      <option disabled style="font-weight: bold; color: black;">Bentang alam</option>  
+      <option disabled>Bentang alam</option>  
       <option value="wd:Q34038" data-kategori="alam">Air terjun</option>
       <option value="wd:Q179049" data-kategori="alam">Cagar alam</option>
       <option value="wd:Q23397 wd:Q204324 wd:Q159954" data-kategori="alam">Danau & kaldera</option>   
@@ -365,7 +365,7 @@
       <option value="wd:Q23442" data-kategori="alam">Pulau</option>
       <option value="wd:Q131681 wd:Q12323" data-kategori="alam">Waduk, bendungan, & embung</option>
       
-      <option disabled style="font-weight: bold; color: black;">Objek lainnya (data masih sedikit)</option>
+      <option disabled>Objek lainnya (data masih sedikit)</option>
       <option value="wd:Q7944 wd:Q8070" data-lokasi="P276" data-tahun="P585">Gempa bumi dan tsunami</option>
       <option value="wd:Q8065 wd:Q3839081 wd:Q7692360 wd:Q8068" data-lokasi="P276" data-tahun="P585">Bencana lainnya</option>
       <option value="wd:Q1323212 wd:Q3199915 wd:Q198 wd:Q645883 wd:Q831663 wd:Q180684 wd:Q178561 wd:Q1261499" data-lokasi="P276" data-tahun="P585">Perang & konflik</option>
@@ -421,10 +421,10 @@
       
       <option value="custom">Ketik Q-ID Sendiri...</option>
     </select>
-    <label for="jenis-input" style="font-weight: bold;">Q-ID (terisi otomatis sesuai kategori):</label>
-    <input type="text" id="jenis-input" value="wd:Q3199141 wd:Q3191695" readonly style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; background-color: #f5f5f5;">
+    <label for="jenis-input">Q-ID (terisi otomatis sesuai kategori):</label>
+    <input type="text" id="jenis-input" class="form-input-kustom" value="wd:Q3199141 wd:Q3191695" readonly>
 
-    <button id="btn-mulai" style="margin-top: 10px; padding: 12px; background-color: #7b0d0c; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; font-size: 16px;font-family: 'Open Sans', sans-serif;">Tarik Data</button>
+    <button id="btn-mulai" class="btn-mulai-utama">Tarik Data</button>
   </section>
 
 <div id="loading" class="panel-content" data-display="flex">
@@ -432,15 +432,15 @@
   </div>
   <section id="index" class="panel-content" data-display="flex">
 <header>
-  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+  <div class="grid-3-col">
     
-    <div class="filter-box" style="grid-column: span 2; min-width: 0;">
-      <select id="filter-region" style="width: 100%;">
+    <div class="filter-box col-span-2">
+      <select id="filter-region">
         <option value="all">Semua Wilayah</option>
       </select>
     </div>
 
-    <div class="filter-box" style="grid-column: span 1; min-width: 0;">
+    <div class="filter-box col-span-1">
 <select id="filter-sort-kombinasi" class="filter-dropdown custom-dropdown-style">
   <option value="default">Semua Usia</option>
   <option value="filter-usia-muda-50">&lt; 50 Tahun</option>
@@ -453,7 +453,7 @@
     
   </div>
 
-  <div id="filter-features" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding-top: 15px;">
+  <div id="filter-features" class="grid-3-col pt-15">
     <button class="feat-btn disabled" id="btn-article" data-filter="article">Memiliki Artikel</button>
     <button class="feat-btn disabled" id="btn-image" data-filter="image">Memiliki Gambar</button>
  <button class="feat-btn disabled" id="btn-all" data-filter="all">Semua Hasil</button>
@@ -465,7 +465,7 @@
        placeholder="Menghitung data..." 
        autocomplete="off" />
 
-<div id="index-container" style="background: #f3e9e9;overflow-y: auto; flex-grow: 1;">
+<div id="index-container">
   <ol id="index-list"></ol>
 </div>
   </section>
@@ -483,7 +483,7 @@ Mari berkontribusi mendokumentasikan dan menghimpun sejarah masjid di Sumatera B
 </div>
  <p>Dengan mengklik link di atas, Anda akan diarahkan ke Google Form. Selanjutnya, kami akan memasukkan kontribusi Anda ke basis data Wikidata  
    dengan tetap mencantumkan atribusi atau sumber dari Anda.</p>
-<p>Anda juga dapat melengkapi atau memperbaiki data secara langsung di Wikidata dengan cara klik pensil <span class="sunting-link" style="margin-left:0px;"></span> 
+<p>Anda juga dapat melengkapi atau memperbaiki data secara langsung di Wikidata dengan cara klik pensil <span class="sunting-link ml-0"></span> 
   di detail masjid yang sedang dibuka. Panduan tersedia di sini.</p>
   </section>
   <section id="about" class="panel-content" data-display="block">
@@ -500,33 +500,33 @@ Mari berkontribusi mendokumentasikan dan menghimpun sejarah masjid di Sumatera B
   </section>
   </section>
 <nav id="navigasi-utama">
-    <ul id="nav-standar" style="display: flex; list-style: none; margin: 12px 0; padding: 0;">
+    <ul id="nav-standar">
       
-      <li class="nav-tab" style="flex: 1; text-align: left;">
-        <a href="#" style="text-decoration: none;">Beranda</a>
+      <li class="nav-tab flex-1 text-left">
+        <a href="#">Beranda</a>
       </li>
 
-      <li class="nav-tab" style="flex: 1; text-align: center;">
-        <a href="#hasil" style="text-decoration: none;">Hasil</a>
+      <li class="nav-tab flex-1 text-center">
+        <a href="#hasil">Hasil</a>
       </li>
 
-      <li class="nav-tab" style="flex: 1; text-align: right; position: relative;">
-        <a id="btn-menu-induk" style="cursor: pointer; text-decoration: none;">Lainnya</a>
+      <li class="nav-tab flex-1 text-right pos-relative">
+        <a id="btn-menu-induk" class="cursor-pointer">Lainnya</a>
         
-        <ul id="submenu-atas" class="kelas-submenu-mu" style="display: flex; min-width: 100%; position: absolute; bottom: 36px; right: 0; margin: 0px; list-style: none; flex-direction: column; z-index: 999;">
-          <li><a href="#about" style="text-decoration: none; display: block;">Tentang</a></li>
-          <li><a href="#tutorial" style="text-decoration: none; display: block;">Tutorial</a></li>
-          <li><a href="#medsos" style="text-decoration: none; display: block;">Media Sosial</a></li>
-          <li><a href="#kegiatan" style="text-decoration: none; display: block;">Kegiatan</a></li>
+        <ul id="submenu-atas" class="kelas-submenu-mu d-flex">
+          <li><a href="#about">Tentang</a></li>
+          <li><a href="#tutorial">Tutorial</a></li>
+          <li><a href="#medsos">Media Sosial</a></li>
+          <li><a href="#kegiatan">Kegiatan</a></li>
         </ul>
       </li>
 
     </ul>
 
-    <ul id="nav-detail" style="display: none; list-style: none; margin: 12px 0; padding: 0;">
-      <li style="flex: 1; text-align: left;"><a id="btn-prev" style="cursor: pointer; text-decoration: none; font-weight: bold;">Sebelumnya</a></li>
-      <li style="flex: 1; text-align: center;"><a href="#hasil">Hasil</a></li>
-      <li style="flex: 1; text-align: right;"><a id="btn-next" style="cursor: pointer; text-decoration: none; font-weight: bold;">Selanjutnya</a></li>
+    <ul id="nav-detail" class="d-none">
+      <li class="flex-1 text-left"><a id="btn-prev" class="cursor-pointer fw-bold">Sebelumnya</a></li>
+      <li class="flex-1 text-center"><a href="#hasil">Hasil</a></li>
+      <li class="flex-1 text-right"><a id="btn-next" class="cursor-pointer fw-bold">Selanjutnya</a></li>
     </ul>
 </nav>
 <section id="map"></section>
