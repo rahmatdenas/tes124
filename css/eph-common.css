@@ -829,6 +829,7 @@ height: 16px;
   font: 600 16px/20px "Open Sans", sans-serif;
   color: #fff;
   text-align: center;
+   margin: 13px 20px 13px 20px !important;
 }
 .leaflet-popup-content .subtitle {
   padding: 2px 0 0;
