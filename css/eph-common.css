@@ -982,7 +982,7 @@ position: absolute;
   flex-shrink: 0;         /* KUNCI SAFARI: Mencegah teks terdistorsi/memelar */
   line-height: 1;         /* Menjaga tinggi teks tetap konsisten */
        text-align: center;
-   padding: 8px 0 10px;
+   padding: 8px 10px 10px;
 }
 
 /* Gambar */
