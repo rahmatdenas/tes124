@@ -882,7 +882,7 @@ function generateFigure(filename, title = "Situs", classNames = []) {
   } else {
     let namaAmanURL = encodeURIComponent(title);
     let gFormFotoUrl = `https://docs.google.com/forms/d/e/1FAIpQLSd7_u-7yCwDtXIkDO--bILry6mWGoRCnnfSumL_PEjfle0aLg/viewform?usp=pp_url&entry.2138396049=${namaAmanURL}`;
-    return `<figure class="${classNames.join(' ')} nodata">Belum ada foto. <a href="${gFormFotoUrl}" target="_blank" rel="noopener noreferrer" class="sunting-linktambah no-border">Tambahkan!</a></figure>`;
+    return `<figure class="${classNames.join(' ')} nodata">Belum ada foto. <a href="${gFormFotoUrl}" target="_blank" rel="noopener noreferrer" class="sunting-linktambah">Tambahkan!</a></figure>`;
   }
 }
 
