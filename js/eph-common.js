@@ -24,10 +24,10 @@ var Cluster;
 var BootstrapDataIsLoaded = false;  
 var PrimaryDataIsLoaded   = false;  
 
-var isAppInitialLoad      = true; // Tambahkan ini!
-var isFetching            = false; // Menandai apakah satpam sedang mencari data
-var currentSearchToken    = 0;     // <--- Letakkan di sini (berdekatan dengan isFetching)
-var globalFetchController = new AbortController(); // <--- (Jika Anda jadi memasang AbortController)
+var isAppInitialLoad      = true; 
+var isFetching            = false; 
+var currentSearchToken    = 0;     
+var globalFetchController = new AbortController(); 
 var currentActiveShapeLayer = null;
 var currentDisplayedQid = null;
 var lastValidHash   = 'landing';
@@ -52,16 +52,15 @@ function tampilkanDialog(pesan, tipe = 'alert', judul = 'Perhatian') {
     msgElem.innerHTML = pesan; 
 
     if (tipe === 'confirm') {
-      btnNo.style.display = 'inline-block';
+      btnNo.classList.remove('d-none');
       btnYes.textContent = 'Ya';
     } else {
-      btnNo.style.display = 'none'; 
-      btnYes.textContent = 'Tutup'; // <--- Teks diubah menjadi "Tutup"
+      btnNo.classList.add('d-none'); 
+      btnYes.textContent = 'Tutup';
     }
 
     overlay.classList.add('aktif');
 
-    // Fungsi pembantu agar bersih dari bentrok memori
     const tutupDanBersihkan = (nilai) => {
       overlay.classList.remove('aktif');
       btnYes.onclick = null;
@@ -70,13 +69,9 @@ function tampilkanDialog(pesan, tipe = 'alert', judul = 'Perhatian') {
       resolve(nilai);
     };
 
-    // Tutup saat tombol ditekan
     btnYes.onclick = () => tutupDanBersihkan(true);
     btnNo.onclick = () => tutupDanBersihkan(false);
 
-    // +++ TAMBAHAN UX SELULER +++
-    // Jika area hitam (overlay) di luar kotak diklik, otomatis tutup!
-    // (Hanya berlaku untuk mode "alert". Untuk "confirm", user harus pilih Ya/Batal).
     overlay.onclick = function(e) {
       if (e.target === overlay && tipe === 'alert') {
         tutupDanBersihkan(true);
@@ -93,17 +88,15 @@ window.konfirmasiBerhenti = function() {
         
         let progressText = document.querySelector('#index-list p');
         if (progressText) {
-           progressText.innerHTML = `<span style="color:#7b0d0c; font-weight:bold;">Memutus koneksi... Menyiapkan data yang terselamatkan.</span><br><br>Mohon tunggu sebentar, sistem sedang membangun koordinat peta...`;
+           progressText.innerHTML = `<span class="text-alert-bold">Memutus koneksi... Menyiapkan data yang terselamatkan.</span><br><br>Mohon tunggu sebentar, sistem sedang membangun koordinat peta...`;
         }
-        // +++ TAMBAHAN: Sembunyikan tombol setelah dipencet agar layar bersih +++
         let wadahTombol = document.getElementById('wadah-tombol-berhenti');
-        if (wadahTombol) wadahTombol.style.display = 'none';
+        if (wadahTombol) wadahTombol.classList.add('d-none');
 
-        // +++ KUNCI PERBAIKAN: Bunuh yang lama, lahirkan yang baru +++
         if (typeof globalFetchController !== 'undefined') {
           let oldController = globalFetchController;
-          globalFetchController = new AbortController(); // Beri nyawa baru untuk sisa proses peta
-          oldController.abort(); // Tembak mati pencarian yang sedang nyangkut
+          globalFetchController = new AbortController(); 
+          oldController.abort(); 
         }
       }
     });
@@ -112,42 +105,34 @@ window.konfirmasiBerhenti = function() {
 // ========================================================
 // 🛡️ JARING PENGAMAN GLOBAL (FOKUS: LEAFLET CRASH & STORY-3)
 // ========================================================
-let sedangCrash = false; // Penjaga agar dialog tidak muncul berkali-kali
+let sedangCrash = false; 
 
 window.addEventListener('error', function(event) {
- // Abaikan eror dari ekstensi browser
   if (event.filename && !event.filename.includes(window.location.hostname) && window.location.hostname !== '') {
       return false; 
   }
   
-  // FILTER SUPER KETAT: Hanya tangkap jika erornya tentang "_leaflet_id" (Uncaught TypeError)
   let pesan = event.message ? event.message.toString() : "";
   if (pesan.includes('_leaflet_id')) {
       picuLayarCrash(pesan);
   }
 });
 
-// Catatan: 'unhandledrejection' sengaja DIHAPUS agar eror fetch/gambar tidak memicu dialog ini.
-
 function picuLayarCrash(pesanEror) {
   if (sedangCrash) return;
   sedangCrash = true;
 
-  // Sembunyikan pesan loading di sidebar jika sedang berjalan
   let progressText = document.querySelector('#index-list p');
   if (progressText) progressText.innerHTML = '';
 
-  // Rapikan pesan eror agar tidak terlalu panjang
   let teksLog = pesanEror ? String(pesanEror).substring(0, 100) : 'Unknown Error';
 
   let pesanDialog = `Maaf, terjadi kesalahan sistem yang tidak terduga saat merender peta.<br>
-                     <span style="font-family: monospace; font-size: 11px; color: #888;">Log: ${teksLog}...</span><br>
+                     <span class="log-text">Log: ${teksLog}...</span><br>
                      Klik <b>Tutup</b> untuk memuat ulang aplikasi dan memulihkan sistem.`;
 
-  // Panggil fungsi dialog kustom andalan Anda!
   tampilkanDialog(pesanDialog, "alert", "Aplikasi Mengalami Kendala")
     .then(() => {
-      // Hard reload! Kembali ke beranda murni
       window.location.href = window.location.pathname;
     });
 }
@@ -156,7 +141,6 @@ const ikonTetesanAir = L.divIcon({
   className: 'ikon-marker-ringan',
   html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -13 412 538" width="30" height="40" style="overflow: visible;">
            <ellipse cx="192" cy="510" rx="60" ry="15" fill="rgba(0,0,0,0.4)" />
-           
            <path fill="#cc4444" fill-rule="evenodd" 
                  d="M172.3 501.7C27 291 0 269.4 0 192 0 86 86 0 192 0s192 86 192 192c0 77.4-27 99-172.3 309.7-9.5 13.8-29.9 13.8-39.5 0z 
                     M 192, 132 a 60,60 0 1,0 0,120 a 60,60 0 1,0 0,-120 z"/>
@@ -173,37 +157,30 @@ function init() {
   setupLandingForm();
   window.addEventListener('hashchange', processHashChange);
 
-  // =========================================================
-  // LANGKAH B: LOGIKA BUKA-TUTUP MENU DROP-UP
-  // =========================================================
 document.addEventListener('click', function(e) {
     let btnMenu = document.getElementById('btn-menu-induk');
     let subMenu = document.getElementById('submenu-atas');
     
     if (!btnMenu || !subMenu) return;
 
-    // Jika tombol "Menu" ditekan, buka/tutup anak menu + atur warna aktifnya
     if (e.target === btnMenu) {
-      if (subMenu.style.display === 'none') {
-        subMenu.style.display = 'flex';
-        btnMenu.parentElement.classList.add('selected'); // Menyala saat diklik buka
+      if (subMenu.classList.contains('d-none')) {
+        subMenu.classList.remove('d-none');
+        btnMenu.parentElement.classList.add('selected'); 
       } else {
-        subMenu.style.display = 'none';
-        btnMenu.parentElement.classList.remove('selected'); // Padam saat ditutup
+        subMenu.classList.add('d-none');
+        btnMenu.parentElement.classList.remove('selected'); 
       }
     } 
-    // Jika pengguna mengklik di area luar menu, sembunyikan dan padamkan
     else if (!subMenu.contains(e.target)) {
-      subMenu.style.display = 'none';
+      subMenu.classList.add('d-none');
       btnMenu.parentElement.classList.remove('selected');
     } 
-    // Jika pengguna mengklik salah satu link di dalam anak menu, sembunyikan dan padamkan
     else if (e.target.tagName === 'A') {
-      subMenu.style.display = 'none';
+      subMenu.classList.add('d-none');
       btnMenu.parentElement.classList.remove('selected');
     }
   });
-  // =========================================================
   
   Map.on('popupopen', function(e) { 
     e.popup._sudahDiupdate = false;
@@ -213,16 +190,12 @@ document.addEventListener('click', function(e) {
     }
     let record = Records[qid];
     
-    // 2. INJEKSI GAMBAR POPUP
     if (record.imageFilename && !e.popup._hasImage) {
       let encodedFilename = encodeURIComponent(record.imageFilename);
       let imgUrl = `${COMMONS_WIKI_URL_PREF}Special:FilePath/${encodedFilename}?width=250`;
       let imgHtml = `
-            <div style="text-align:center; margin-top:17px;margin-bottom: 5px;">
-              <img src="${imgUrl}" 
-                   draggable="false" 
-                   style="width:100%; min-width:90px; height:130px; object-fit:cover; border-radius:4px;" 
-                   alt="Thumbnail"
+            <div class="popup-img-container">
+              <img src="${imgUrl}" draggable="false" class="popup-img" alt="Thumbnail"
                    onload="let p = Records['${qid}'].popup; if (p && !p._sudahDiupdate) { p._sudahDiupdate = true; p.update(); }">
             </div>
           `;
@@ -234,9 +207,7 @@ document.addEventListener('click', function(e) {
   setTimeout(() => {
     let preloader = document.getElementById('eph-preloader');
     if (preloader) {
-      preloader.style.opacity = '0';
-      preloader.style.visibility = 'hidden';
-      // Hapus elemen sepenuhnya dari DOM setelah animasinya selesai (400ms) agar tidak membebani memori
+      preloader.classList.add('hide-preloader');
       setTimeout(() => preloader.remove(), 400); 
     }
   }, 150);
@@ -254,12 +225,10 @@ function setupLandingForm() {
     if (this.value === 'custom') {
       inputTxt.value = 'wd:'; 
       inputTxt.readOnly = false;
-      inputTxt.style.backgroundColor = '#ffffff';
       inputTxt.focus();
     } else {
       inputTxt.value = this.value;
       inputTxt.readOnly = true;
-      inputTxt.style.backgroundColor = '#f5f5f5';
     }
   });
 
@@ -276,26 +245,18 @@ let finalValue = inputTxt.value.trim();
     
     resetApp();
     
-    // === MULAI LOADING ===
     isFetching = true; 
     currentSearchToken = Date.now();
     
     window.location.hash = 'hasil';
     
-    // =========================================================
-    // +++ PASANG BOM WAKTU DI SINI SAYANGKU +++
-    // =========================================================
 loadingTimeoutToken = setTimeout(() => {
-      // KUNCI PERBAIKAN: Kita bidik langsung elemen <p>-nya saja, 
-      // jangan bidik #index-list agar judul & animasi tidak terhapus.
       let loadingDesc = document.querySelector('#index-list p'); 
       
-      // Pastikan statusnya memang masih mencari data (isFetching = true)
       if (loadingDesc && isFetching) {
         loadingDesc.innerHTML = `Jika data mencapai ribuan, proses penarikan data membutuhkan waktu 3-7 menit...`;
       }
-    }, 27000); // 27 detik)
-    // =========================================================
+    }, 27000); 
 
     loadPrimaryData();
   });
@@ -310,12 +271,9 @@ function resetApp() {
     loadingTimeoutToken = null;
   }
   
-  // =========================================================
-  // +++ BUNUH SEMUA KONEKSI YANG SEDANG BERJALAN +++
-  // =========================================================
   if (typeof globalFetchController !== 'undefined') {
-    globalFetchController.abort(); // Membunuh semua XHR & Fetch serentak!
-    globalFetchController = new AbortController(); // Beri nyawa baru
+    globalFetchController.abort(); 
+    globalFetchController = new AbortController(); 
   }
 
   let brandingDesc = document.getElementById('branding-desc');
@@ -323,7 +281,6 @@ function resetApp() {
     brandingDesc.textContent = 'Ensiklopedia Interaktif Indonesia';
   }
 
-  // 2. Bersihkan Memori Inti
   Records = {};
   ProvinceIndex = {};
   BootstrapDataIsLoaded = false;
@@ -333,33 +290,25 @@ function resetApp() {
   currentFilteredRecords = [];
   currentRenderIndex = 0;
 
-  // 3. Bersihkan Titik di Peta
   if (Cluster) {
     Cluster.clearLayers();
   }
 
-  // 4. Bersihkan Daftar Bangunan
   let indexList = document.getElementById('index-list');
   if (indexList) indexList.innerHTML = '';
 
-  // =========================================================
-  // KUNCI PERBAIKAN: BERSIHKAN "HANTU KOSMETIK" DI TAMPILAN
-  // =========================================================
 
- // A. Kembalikan Menu Wilayah ke status kosong
   let selectRegion = document.getElementById('filter-region');
   if (selectRegion) {
     selectRegion.innerHTML = '<option value="all">Semua Wilayah</option>';
     selectRegion.value = 'all';
   }
 
-  // B. Kembalikan Menu Usia ke default
   let selectKombinasi = document.getElementById('filter-sort-kombinasi');
   if (selectKombinasi) {
     selectKombinasi.value = 'default';
   }
   
-  // C. Bersihkan Kotak Pencarian dan Angka Hasil
   let searchInput = document.getElementById('search-input');
   if (searchInput) {
     searchInput.value = '';
@@ -367,14 +316,12 @@ function resetApp() {
     searchInput.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
-  // D. Tangkap tombol bos (btnAll) cukup SEKALI saja di sini
   let btnAll = document.getElementById('btn-all');
   
   document.querySelectorAll('.feat-btn:not(#btn-all)').forEach(b => {
     b.classList.remove('active');
   });
 
-  // E. Kembalikan teks asli pada tombol dan KUNCI SEMUANYA untuk Landing
   let btnImg = document.getElementById('btn-image') || document.querySelector('[data-filter="image"]');
   let btnArt = document.getElementById('btn-article') || document.querySelector('[data-filter="article"]');
   
@@ -388,36 +335,28 @@ function resetApp() {
   }
   if (btnAll) {
     btnAll.textContent = 'Semua Hasil';
-    btnAll.classList.add('disabled');   // Kunci di awal
-    btnAll.classList.remove('active');  // Matikan lampu active-nya
+    btnAll.classList.add('disabled');   
+    btnAll.classList.remove('active');  
   }
 
-  // F. Reset memori variabel filter di JS 3 agar tidak menyisakan status
   if (typeof activeFeatures !== 'undefined' && activeFeatures.clear) activeFeatures.clear();
   if (typeof currentRegionFilter !== 'undefined') currentRegionFilter = 'all';
   if (typeof currentUsiaFilter !== 'undefined') currentUsiaFilter = 'all';
   if (typeof currentSearchQuery !== 'undefined') currentSearchQuery = '';
 
-  // Taruh baris ini di bagian paling bawah fungsi resetApp()
   let subMenuAtas = document.getElementById('submenu-atas');
-  if (subMenuAtas) subMenuAtas.style.display = 'none';
-
-	
-	
-
+  if (subMenuAtas) subMenuAtas.classList.add('d-none');
 }
 
 function initMap() {
-  // 1. Matikan atribusi bawaan agar bisa kita pindahkan
 Map = new L.map('map', { 
   zoomControl: false, 
   attributionControl: false,
-  zoomDelta: 2, // Lompatan tombol +/- (Ubah ke 2 atau 3 untuk lompatan lebih jauh)
-  zoomSnap: 2   // Kunci presisi scroll mouse (Selalu samakan angkanya dengan zoomDelta)
+  zoomDelta: 2, 
+  zoomSnap: 2   
 });
   Map.fitBounds([[MAX_PH_LAT, MAX_PH_LON], [MIN_PH_LAT, MIN_PH_LON]]);
 
-  // 2. Tambahkan Atribusi di Kiri Atas (Dieksekusi paling pertama agar ada di posisi paling atas)
   L.control.attribution({ position: 'topleft' }).addTo(Map);
 
   let cartoLayer = new L.tileLayer(CARTO_LAYER_URL, {
@@ -435,11 +374,9 @@ Map = new L.map('map', {
     'OpenStreetMap Carto' : osmLayer,
   };
   
-  // 3. Tombol Layer otomatis akan ditambahkan di bawah teks atribusi
   L.control.layers(baseMaps, null, {position: 'topleft'}).addTo(Map);
   L.control.zoom({ position: 'bottomright' }).addTo(Map);
 
-  // SIMPAN KE VARIABEL GLOBAL
   window.TombolGPSMap = L.control.locate({ 
     position: 'bottomright', 
     showCompass: false, 
@@ -456,7 +393,6 @@ Map = new L.map('map', {
   };
   powered.addTo(Map);
 	
-  // KENDALIKAN MANUAL KLIK PADA KLASTER
 Cluster = new L.markerClusterGroup({
   maxClusterRadius: function(zoom) {
     let z = Math.round(zoom);        
@@ -465,25 +401,21 @@ Cluster = new L.markerClusterGroup({
     if (z === 17) return 20;
     return 10; 
   },
-  zoomToBoundsOnClick: true, // KEMBALIKAN KE TRUE
-  spiderfyOnMaxZoom: true    // KEMBALIKAN KE TRUE
+  zoomToBoundsOnClick: true, 
+  spiderfyOnMaxZoom: true    
 }).addTo(Map);
 
-// GANTI event clusterclick Anda menjadi seperti ini:
 Cluster.on('clusterclick', function (a) {
   let cluster = a.layer;
   let count = cluster.getChildCount();
   let currentZoom = Map.getZoom();
   let maxZoom = TILE_LAYER_MAX_ZOOM;
   
-  // Deteksi jika kluster akan melakukan spiderfy (mekar)
-  // Ini terjadi jika sudah mentok maxZoom, ATAU koordinatnya sama persis
   let bounds = cluster.getBounds();
   let isSamePoint = bounds.getSouthWest().equals(bounds.getNorthEast());
 
   if (currentZoom >= maxZoom || isSamePoint) {
     if (count > 60) {
-      // Cegah Leaflet memekarkan kluster secara internal
       cluster.unspiderfy(); 
       
       tampilkanDialog(
@@ -496,17 +428,13 @@ Cluster.on('clusterclick', function (a) {
 });
 }
 
-// Tambahkan parameter 'signal' di bagian akhir
 function queryWdqsThenProcess(query, processEachResult, postprocessCallback, signal = null) {
   let promise = new Promise((resolve, reject) => {
     let xhr = new XMLHttpRequest();
     
-    // +++ KUNCI ABORT CONTROLLER +++
     if (signal) {
-      // 1. Jika request keburu dibatalkan sebelum sempat dikirim
       if (signal.aborted) return reject('ABORTED');
       
-      // 2. Pasang telinga: jika sinyal ditarik, bunuh XHR ini!
       signal.addEventListener('abort', () => {
         xhr.abort();
         reject('ABORTED');
@@ -519,7 +447,6 @@ function queryWdqsThenProcess(query, processEachResult, postprocessCallback, sig
       if (xhr.status === 200) {
         resolve(JSON.parse(xhr.responseText));
       } else if (xhr.status === 0) {
-        // Jika status 0 dan signal tertangkap 'aborted', berarti ini dibatalkan
         reject((signal && signal.aborted) ? 'ABORTED' : 'NETWORK_ERROR');
       } else {
         reject(xhr.status);
@@ -545,7 +472,6 @@ function fetchWdqsRaw(query, signal = null) {
   return new Promise((resolve, reject) => {
     let xhr = new XMLHttpRequest();
 
-    // +++ KUNCI ABORT CONTROLLER +++
     if (signal) {
       if (signal.aborted) return reject('ABORTED');
       signal.addEventListener('abort', () => {
@@ -582,16 +508,15 @@ function fetchWdqsRaw(query, signal = null) {
 
 async function fetchWdqsRawWithRetry(query, maxRetry = 3, offsetLabel = '', signal = null) {
   for (let attempt = 1; attempt <= maxRetry; attempt++) {
-      if (signal && signal.aborted) throw 'ABORTED'; // TAMBAHKAN pengecekan di awal 
+      if (signal && signal.aborted) throw 'ABORTED'; 
     try {
       if (attempt > 1) {
         let progressText = document.querySelector('#index-list p');
         if (progressText) {
-progressText.innerHTML = `Sedang melakukan percobaan ulang ke-${attempt}${offsetLabel}...`;
+          progressText.innerHTML = `Sedang melakukan percobaan ulang ke-${attempt}${offsetLabel}...`;
         }
       }
       
-      // Sekarang variabel signal dikenali dengan aman
       let result = await fetchWdqsRaw(query, signal);
       
       if (attempt > 1) {
@@ -602,43 +527,36 @@ progressText.innerHTML = `Sedang melakukan percobaan ulang ke-${attempt}${offset
     } catch (error) {
       if (error === 'ABORTED') throw error; 
       
-	
       console.warn(`[${offsetLabel}] Percobaan ke-${attempt} gagal (${error}), mencoba lagi...`);
       
       let progressText = document.querySelector('#index-list p');
       if (progressText) {
-progressText.innerHTML = `<span style="color:#cc0000; font-weight:bold;">Percobaan ke-${attempt} gagal${offsetLabel}. Melakukan penarikan ulang.</span>`;
+          progressText.innerHTML = `<span class="text-error">Percobaan ke-${attempt} gagal${offsetLabel}. Melakukan penarikan ulang.</span>`;
          }
 
-      // KUNCI PERBAIKAN: Gunakan status AbortSignal murni
       if (attempt === maxRetry) {
         if (signal && signal.aborted) throw 'ABORTED';
         throw error;
       }
       
       await new Promise(r => setTimeout(r, 1500 * attempt));
-      
-      // Jaring pengaman ekstra setelah jeda
       if (signal && signal.aborted) throw 'ABORTED';
     }
   }
 }
 
-// FUNGSI BARU #3: Loop LIMIT/OFFSET, PAKAI JUMLAH ENTITAS UNIK (?SQ) sebagai penanda halaman terakhir
-// (bukan jumlah baris mentah — karena satu entitas bisa punya >1 baris akibat OPTIONAL tanggal ganda)
-
 async function queryWdqsPaginated(queryTemplate, processEachResult, postprocessCallback, chunkSize = 5000) {
   let offset = 0;
   let halaman = 1;
   let totalDataTerkumpul = 0; 
-  let signal = typeof globalFetchController !== 'undefined' ? globalFetchController.signal : null; // TAMBAHKAN INI
+  let signal = typeof globalFetchController !== 'undefined' ? globalFetchController.signal : null; 
   try {
     while (true) {
       if (window.hentikanPencarian) break;
 
       let pagedQuery = queryTemplate.replace('<PLACEHOLDER_LIMIT_OFFSET>', `LIMIT ${chunkSize} OFFSET ${offset}`);
-let offsetLabel = ` (data ${offset.toLocaleString('id-ID')}–${(offset + chunkSize).toLocaleString('id-ID')})`
-let bindings = await fetchWdqsRawWithRetry(pagedQuery, 3, offsetLabel, signal); // ganti di sini
+      let offsetLabel = ` (data ${offset.toLocaleString('id-ID')}–${(offset + chunkSize).toLocaleString('id-ID')})`
+      let bindings = await fetchWdqsRawWithRetry(pagedQuery, 3, offsetLabel, signal); 
       
       if (window.hentikanPencarian) break;
       
@@ -655,29 +573,26 @@ let bindings = await fetchWdqsRawWithRetry(pagedQuery, 3, offsetLabel, signal); 
       totalDataTerkumpul += kombinasiUnik;
       console.log(`[Halaman ${halaman}] Kombinasi (s,p,l) unik:`, kombinasiUnik);
       
-if (kombinasiUnik < chunkSize) {
+      if (kombinasiUnik < chunkSize) {
          break; 
       } else {
          let progressText = document.querySelector('#index-list p');
          
          if (progressText && !window.hentikanPencarian) {
-           // 1. Teks informasi cukup angka saja (tanpa link)
            progressText.innerHTML = `Selesai menarik <b>${totalDataTerkumpul.toLocaleString('id-ID')}</b> data. Penarikan data masih berlanjut...`;
            
-           // 2. +++ PERBAIKAN TOMBOL "Cukupkan Pencarian?" +++
-if (totalDataTerkumpul >= 20000) {
-  let wadahTombol = document.getElementById('wadah-tombol-berhenti');
-  if (wadahTombol && wadahTombol.innerHTML === '') {
-    // Tombol sekarang berada di wadah sendiri, tidak menumpang di <p>
-    wadahTombol.innerHTML = `<a href="#" onclick="window.konfirmasiBerhenti(); return false;" style="background-color: #7b0d0c; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: 600;">Cukupkan Pencarian?</a>`;
-  }
-}
+           if (totalDataTerkumpul >= 20000) {
+             let wadahTombol = document.getElementById('wadah-tombol-berhenti');
+             if (wadahTombol && wadahTombol.innerHTML === '') {
+               wadahTombol.innerHTML = `<a href="#" onclick="window.konfirmasiBerhenti(); return false;" class="btn-primary-large">Cukupkan Pencarian?</a>`;
+             }
+           }
          }
       }
       offset += chunkSize;
       halaman++;
     }
-} catch (error) {
+  } catch (error) {
     if (error === 'ABORTED') {
       if (window.hentikanPencarian) {
          console.log('Penarikan dipotong paksa oleh pengguna. Melanjutkan ke render peta...');
@@ -688,31 +603,21 @@ if (totalDataTerkumpul >= 20000) {
     } else {
       console.error('Proses paginasi gagal total:', error);
       
-      // +++ KUNCI PERBAIKAN: PENYELAMATAN DATA +++
-      // Jika kegagalan terjadi ketika kita SUDAH memiliki data (Halaman 2 ke atas)
       if (totalDataTerkumpul > 0) {
         console.warn(`Koneksi terputus. Menyelamatkan ${totalDataTerkumpul} data yang ada...`);
         
-        // Beri tahu pengguna bahwa tidak semua data berhasil ditarik
         tampilkanDialog(
           `Koneksi internet tidak stabil saat menarik sisa data.<br><br>Sistem berhasil menyelamatkan <b>${totalDataTerkumpul.toLocaleString('id-ID')}</b> data. Peta akan dibangun berdasarkan data yang berhasil ditangkap.`, 
           "alert", 
           "Koneksi Terputus Sebagian"
         );
         
-        // KUNCI: KITA TIDAK ME-THROW ERROR DI SINI!
-        // Membiarkan kode berlanjut ke postprocessCallback() di bawah, 
-        // sehingga proses akan otomatis lanjut merakit koordinat dan peta.
-        
       } else {
-        // Jika dari awal (Halaman 1) sudah gagal, lempar error untuk memunculkan layar merah
         throw error;
       }
-      // ++++++++++++++++++++++++++++++++++++++++++
     }
   }
   
-  // Baris ini akan merakit sisa data yang selamat karena tidak ada 'throw' yang menghalanginya
   if (postprocessCallback) postprocessCallback();
 }
 
@@ -722,65 +627,49 @@ function enableApp() {
 }
 
 function processHashChange() {
-  // 1. CEGATAN MUNDUR: Jika kita sedang dalam proses mengembalikan URL karena pengguna 
-  // menekan "Batal", abaikan siklus ini agar tidak terjadi infinite loop.
   if (isRevertingHash) {
     isRevertingHash = false;
     return; 
   }
 
   let logoBranding = document.getElementById('branding-icon');
-if (logoBranding) {
-  logoBranding.classList.add('nyala-sementara');
-  // Matikan lampu logo setelah 600 milidetik (0.6 detik)
-  setTimeout(() => {
-    logoBranding.classList.remove('nyala-sementara');
-  }, 300);
-}
+  if (logoBranding) {
+    logoBranding.classList.add('nyala-sementara');
+    setTimeout(() => {
+      logoBranding.classList.remove('nyala-sementara');
+    }, 300);
+  }
 
   let fragment = window.location.hash.replace('#', '');
 
-  // Jangan paksa panel terbuka di mobile saat baru dimuat
   if (typeof window.setMobilePanelExpanded === 'function') {
     isAppInitialLoad = false; 
   }
 
-  // =================================================================
-  // 2. KOTAK KONFIRMASI (Bekerja mulus di Safari & Chrome)
-  // =================================================================
-  
- // Jika pengguna mencoba ke Beranda (fragment kosong) TAPI ada data yang sudah/sedang ditarik
   if (fragment === '' && (PrimaryDataIsLoaded || isFetching)) {
     
-    // Panggil dialog kustom kita
- tampilkanDialog("Kembali ke beranda akan menghapus data yang sedang/sudah dimuat. Anda yakin ingin mereset pencarian?", "confirm", "Kembali ke Beranda")
+   tampilkanDialog("Kembali ke beranda akan menghapus data yang sedang/sudah dimuat. Anda yakin ingin mereset pencarian?", "confirm", "Kembali ke Beranda")
       .then(yakin => {
         if (yakin) {
-          // JIKA YA: Bersihkan semua dan kembali ke Beranda murni
           lastValidHash = 'landing';
           history.replaceState(null, null, window.location.pathname);
           resetApp();
-          resetFormWilayah(); // <--- TAMBAHKAN BARIS INI DI SINI
+          resetFormWilayah(); 
           document.title = 'Mulai – ' + BASE_TITLE;
           displayPanelContent('landing');
           updateNavigationUI(''); 
         } else {
-          // JIKA BATAL: Kembalikan URL ke posisi sebelumnya secara diam-diam
           isRevertingHash = true;
           window.location.hash = lastValidHash === 'landing' ? '' : lastValidHash;
         }
       });
     
-    return; // Tetap hentikan eksekusi sinkron di sini
+    return; 
   }
-  // =================================================================
-  // Jika tidak ada halangan atau bukan menuju Beranda, jalankan normal
-  // =================================================================
 
   updateNavigationUI(fragment);
 
   if (fragment === '') {
-    // BERANDA NORMAL (Tidak ada data ditarik, murni baru buka web)
     lastValidHash = 'landing';
     history.replaceState(null, null, window.location.pathname); 
     resetApp(); 
@@ -788,26 +677,20 @@ if (logoBranding) {
     displayPanelContent('landing');
   }
   else if (fragment === 'about') {
-    // TENTANG
-    lastValidHash = 'about'; // Catat sebagai hash terakhir yang valid
+    lastValidHash = 'about'; 
     document.title = 'Tentang – ' + BASE_TITLE;
     displayPanelContent('about');
     currentDisplayedQid = null;
   }
   else {
-    // HASIL atau DETAIL BUTIR
-    lastValidHash = fragment; // Catat QID atau 'hasil' sebagai hash terakhir yang valid
+    lastValidHash = fragment; 
     
     let isIndexPage = (fragment === 'hasil');
 
-    // KONDISI 1: DATA BELUM DITARIK (ATAU SEDANG DITARIK)
     if (!PrimaryDataIsLoaded) {
       if (fragment !== '') {
-        // Jika sembarang ketik URL atau menekan tab Hasil sebelum data ditarik
-        if (!isIndexPage) window.location.hash = 'hasil'; // Paksa arahkan ke #hasil
+        if (!isIndexPage) window.location.hash = 'hasil'; 
         
-        // --- KUNCI PERBAIKAN 1 ---
-        // Jika sedang loading, beri tahu di tab browser. Jika murni kosong, tulis "Data Belum Ditarik"
         if (isFetching) {
           document.title = `Memuat ${currentNamaKlaster}... – ${BASE_TITLE}`;
         } else {
@@ -819,32 +702,25 @@ if (logoBranding) {
         let indexList = document.getElementById('index-list');          
         if (indexList && !isFetching) {
           indexList.innerHTML = `
-            <div style="padding: 40px 20px; text-align: center; line-height: 1.6;">
-              <h3 style="margin-bottom: 10px; margin-top:0; color: #333;">Data Belum Ditarik</h3>
-              <p style="color: #666; font-size:14px; margin-bottom: 25px;">
-              Anda belum melakukan pencarian. Silakan kembali ke halaman Beranda untuk memilih entitas yang ingin dieksplorasi.</p>
-              <a href="#" style="background-color: #7b0d0c; color: #fff; 
-              padding: 10px 20px; text-decoration: none; border-radius: 5px; 
-              font-weight: 600; display: inline-block;">Pilih Data</a>
+            <div class="empty-state-container">
+              <h3 class="empty-state-title">Data Belum Ditarik</h3>
+              <p class="empty-state-desc">Anda belum melakukan pencarian. Silakan kembali ke halaman Beranda untuk memilih entitas yang ingin dieksplorasi.</p>
+              <a href="#" class="btn-primary-large">Pilih Data</a>
             </div>
-          `; // href="#" agar memicu kembali ke Beranda murni
+          `; 
         }
       }
     } 
-    // KONDISI 2: DATA SUDAH DITARIK NORMAL
     else {
       if (isIndexPage || !(fragment in Records)) {
         if (!isIndexPage) window.location.hash = 'hasil';  
         
-        // --- KUNCI PERBAIKAN 2 ---
-        // Tampilkan Nama Klaster dan Wilayah saat pengguna membuka tab Hasil
         document.title = `${currentNamaKlaster} di ${currentNamaWilayah} – ${BASE_TITLE}`;
         
         displayPanelContent('index');
         currentDisplayedQid = null;
       }
       else {
-        // Buka Detail Butir (Judul otomatis mengikuti nama bangunan/situs karena fungsi displayRecordDetails)
         activateMapMarker(fragment);
         displayRecordDetails(fragment);
       }
@@ -855,22 +731,14 @@ if (logoBranding) {
 function activateMapMarker(qid) {
   let record = Records[qid];
 
-  // 1. Pastikan data dan marker ada
   if (!record || !record.mapMarker) return;
-  
-  // 2. Abaikan jika popup sudah terbuka
   if (record.popup && record.popup.isOpen()) return;
-
-  // 3. Matikan "bom waktu" (debounce) jika user klik beruntun
   if (flightDebounceToken) clearTimeout(flightDebounceToken);
 
-  // 4. Pasang "bom waktu" baru selama 250ms
   flightDebounceToken = setTimeout(() => {
     try {
       Map.closePopup();
 
-      // +++ SATPAM SUPER KETAT: CEK KTP LEAFLET (_leaflet_id) +++
-      // Cegah error 'Cannot use in operator' jika marker keburu dihapus/dihancurkan filter
       if (!record.mapMarker || typeof record.mapMarker._leaflet_id === 'undefined') {
         console.warn(`[Guard] Marker ${qid} sudah menjadi hantu (terhapus filter). Penerbangan dibatalkan.`);
         return;
@@ -883,13 +751,11 @@ function activateMapMarker(qid) {
         }
       });
 
-      // Kasus khusus: Titik yang menumpuk > 60 di satu tempat persis
       if (countSameLocation > 60) {
         Map.setView([record.lat, record.lon], TILE_LAYER_MAX_ZOOM);
         setTimeout(() => {
           if (window.location.hash !== '#' + qid) return;
           
-          // Cek hantu lagi sebelum menyentuh DOM ikon klaster
           if (!record.mapMarker || typeof record.mapMarker._leaflet_id === 'undefined') return;
 
           let visibleParent = Cluster.getVisibleParent(record.mapMarker);
@@ -901,10 +767,8 @@ function activateMapMarker(qid) {
           }
         }, 350);
       } 
-      // Kasus Normal: Terbang ke klaster
       else {
         
-        // SATPAM 1: Cek dari memori (Bukan dari layar)
         if (!Cluster.hasLayer(record.mapMarker)) {
           console.warn(`[Guard] Marker ${qid} terhapus dari memori. Lompat seketika.`);
           Map.setView([record.lat, record.lon], TILE_LAYER_MAX_ZOOM, { animate: false });
@@ -912,11 +776,9 @@ function activateMapMarker(qid) {
           return;
         }
 
-        // Terbang dan urai klaster secara natural
         Cluster.zoomToShowLayer(
           record.mapMarker,
           function() {
-            // SATPAM 2: Cek apakah user bajak tujuan saat kamera sedang di udara
             if (window.location.hash !== '#' + qid) {
                console.warn(`[Batal] User sudah klik arsip lain. Abaikan pembukaan popup ${qid}.`);
                return;
@@ -926,41 +788,37 @@ function activateMapMarker(qid) {
         );
       }
     } catch (error) {
-      // Menangkap error agar tidak membuat aplikasi crash
       console.error(`[STORY-3] Sistem meredam crash:`, error);
-		// Panggil Layar Crash secara manual karena eror ini sudah ditangkap (tidak akan memicu window.error)
       if (typeof picuLayarCrash === 'function') {
          picuLayarCrash(error.message);
+      }
     }
-	}
   }, 250);
 }
 	
 function displayPanelContent(id) {
-  // Hanya mengatur panel konten yang tampil
+  /* Pastikan <div class="panel-content" id="..."> di HTML telah diberi class d-none dari awal */
   document.querySelectorAll('.panel-content').forEach(content => {
-    content.style.display = (content.id === id) ? content.dataset.display : 'none';
+    if (content.id === id) {
+      content.classList.remove('d-none');
+    } else {
+      content.classList.add('d-none');
+    }
   });
 }
 
 function displayRecordDetails(qid) {
-    if (currentDisplayedQid === qid) return;  // <-- CALL #2 berhenti di sini, tidak ada kedip shapeLayer
+    if (currentDisplayedQid === qid) return;  
   currentDisplayedQid = qid;
   let record = Records[qid];
   document.title = `${record.indexTitle} – ${BASE_TITLE}`;
 
-  // =========================================================
-  // +++ KUNCI AUTO-RETRY YANG AMAN +++
-  // =========================================================
-  // Jika pengguna mengklik marker ini lagi dan sebelumnya cacat karena offline,
-  // buang memori panel lamanya agar sistem dipaksa memuat ulang dari nol!
   if (record._gagalOffline) {
     record.panelElem = undefined;
-    record._gagalOffline = false; // Reset statusnya
+    record._gagalOffline = false; 
   }
   
   if (PrimaryDataIsLoaded) {
-    // KUNCI PERBAIKAN: Bersihkan poligon lama, pasang yang baru
     if (currentActiveShapeLayer) Map.removeLayer(currentActiveShapeLayer);
     if (record.shapeLayer) {
       record.shapeLayer.addTo(Map);
@@ -979,25 +837,22 @@ function displayRecordDetails(qid) {
     }
     
     let detailsElem = document.getElementById('details');
-detailsElem.innerHTML = ''; 
-detailsElem.appendChild(record.panelElem);
+    detailsElem.innerHTML = ''; 
+    detailsElem.appendChild(record.panelElem);
 
     let stuckImages = record.panelElem.querySelectorAll('img.loading');
     stuckImages.forEach(img => {
-      // Jika gambar belum tuntas dimuat ATAU gagal dimuat (lebar aslinya 0)
       if (!img.complete || img.naturalWidth === 0) {
         let currentSrc = img.src;
-        img.src = ''; // Kosongkan src sejenak
-        img.src = currentSrc; // Isi kembali untuk memaksa browser mengulang request HTTP
+        img.src = ''; 
+        img.src = currentSrc; 
       }
     });
-let stuckCaptions = record.panelElem.querySelectorAll('figcaption');
+    let stuckCaptions = record.panelElem.querySelectorAll('figcaption');
     stuckCaptions.forEach(caption => {
-      // Jika teksnya masih nyangkut di memuat...
       if (caption.textContent.includes('(Memuat…)')) {
         let encodedFile = caption.getAttribute('data-filename');
         if (encodedFile) {
-          // KUNCI: Cukup panggil fungsi pembantunya di sini!
           tarikMetadataCaption(encodedFile, null, caption);
         }
       }
@@ -1014,7 +869,6 @@ function generateFigure(filename, title = "Situs", classNames = []) {
     let uniqueId = 'caption-' + Math.random().toString(36).substr(2, 9);
     let encodedFilename = encodeURIComponent(filename);
     
-    // KUNCI: Cukup panggil fungsi pembantunya di sini!
     tarikMetadataCaption(encodedFilename, uniqueId, null);
 
     return (
@@ -1026,10 +880,9 @@ function generateFigure(filename, title = "Situs", classNames = []) {
       '</figure>'
     );
   } else {
-    // KODE JIKA TIDAK ADA GAMBAR (Biarkan tetap sama)
     let namaAmanURL = encodeURIComponent(title);
     let gFormFotoUrl = `https://docs.google.com/forms/d/e/1FAIpQLSd7_u-7yCwDtXIkDO--bILry6mWGoRCnnfSumL_PEjfle0aLg/viewform?usp=pp_url&entry.2138396049=${namaAmanURL}`;
-    return `<figure class="${classNames.join(' ')} nodata">Belum ada foto. <a href="${gFormFotoUrl}" target="_blank" rel="noopener noreferrer" style="border:none;" class="sunting-linktambah">Tambahkan!</a></figure>`;
+    return `<figure class="${classNames.join(' ')} nodata">Belum ada foto. <a href="${gFormFotoUrl}" target="_blank" rel="noopener noreferrer" class="sunting-linktambah no-border">Tambahkan!</a></figure>`;
   }
 }
 
@@ -1052,24 +905,16 @@ function parseDate(result, keyName) {
 // FITUR RADAR GPS: MENCARI SITUS DALAM RADIUS TERTENTU
 // ============================================================
 function jalankanFilterGPS(selectElem) {
-  // 1. Beri tahu pengguna sistem sedang mencari
   selectElem.options[selectElem.selectedIndex].text = "⏳ Mencari satelit GPS...";
 
-  // =========================================================
-  // KUNCI KECERDASAN: SIMPAN & MATIKAN AUTO-ZOOM PLUGIN
-  // =========================================================
   let konfigurasiZoomAsli = window.TombolGPSMap.options.setView;
-  window.TombolGPSMap.options.setView = false; // Matikan tarikan kamera plugin!
+  window.TombolGPSMap.options.setView = false; 
 
-  // 2. Perintahkan plugin bawaan menyala dan mulai melacak
   window.TombolGPSMap.start();
 
-  // 3. Tangkap sinyal saat plugin selesai mendaratkan titik GPS-nya
   Map.once('locationfound', function(e) {
-    // KEMBALIKAN konfigurasi zoom agar kalau tombolnya dipencet manual, dia tetap nge-zoom
     window.TombolGPSMap.options.setView = konfigurasiZoomAsli;
 
-    // Simpan koordinat ke variabel global
     userLocation = {
       lat: e.latlng.lat,
       lon: e.latlng.lng
@@ -1078,10 +923,8 @@ function jalankanFilterGPS(selectElem) {
     selectElem.options[selectElem.selectedIndex].text = "Sekitar Anda (Radius 10 km)";
     currentRegionFilter = 'terdekat';
 
-    // Bersihkan lingkaran 10km lama jika ada
     if (userRadiusCircle) Map.removeLayer(userRadiusCircle);
 
-    // Buat Lingkaran Merah Transparan
     userRadiusCircle = L.circle([userLocation.lat, userLocation.lon], {
       color: 'transparent',
       fillColor: '#882222',
@@ -1089,38 +932,26 @@ function jalankanFilterGPS(selectElem) {
       radius: 10000
     }).addTo(Map);
 
-    // Kamera kitalah yang mengambil alih! Zoom out untuk mencakup seluruh 10km
     Map.fitBounds(userRadiusCircle.getBounds());
-
-    // Jalankan filter
     applyIntersectionFilter();
   });
 
-  // 4. Tangkap jika GPS ditolak atau gagal
   Map.once('locationerror', function(e) {
     window.TombolGPSMap.options.setView = konfigurasiZoomAsli;
-    window.TombolGPSMap.stop(); // Matikan plugin
+    window.TombolGPSMap.stop(); 
     alert("Akses lokasi gagal atau ditolak. Pastikan GPS HP Anda menyala.");
     batalkanFilterGPS(selectElem);
   });
 }
 
 function batalkanFilterGPS(selectElem) {
-  // 1. Matikan langsung plugin GPS bawaannya (Titiknya akan hilang otomatis!)
   if (window.TombolGPSMap) window.TombolGPSMap.stop();
 
-  // +++ KUNCI PERBAIKAN: Lepas listener 'once' yang mungkin masih menunggu +++
-  // Supaya kalau user Start -> Cancel -> Start lagi, tidak ada listener lama
-  // yang masih nyangkut dan bisa terpicu ganda (event locationfound bisa datang
-  // terlambat setelah user sudah membatalkan).
   Map.off('locationfound');
   Map.off('locationerror');
-  // +++ akhir tambahan +++
 
-  // 2. Hapus lingkaran merah buatan kita
   if (userRadiusCircle) Map.removeLayer(userRadiusCircle);
 
-  // 3. Reset ke status 'all'
   selectElem.value = 'all';
   currentRegionFilter = 'all';
   userLocation = null;
@@ -1137,15 +968,10 @@ function updateNavigationUI(fragment) {
   
   if (!navStandar || !navDetail) return;
 
-  // =======================================================
-  // KUNCI PERBAIKAN A: SAPU JAGAT SUBMENU
-  // =======================================================
   let subMenuAtas = document.getElementById('submenu-atas');
   let btnMenuInduk = document.getElementById('btn-menu-induk');
   
-  // Catatan: Jika kamu pakai animasi CSS .tampil yang kita bahas sebelumnya, 
-  // ganti baris di bawah ini menjadi subMenuAtas.classList.remove('tampil');
-  if (subMenuAtas) subMenuAtas.style.display = 'none'; 
+  if (subMenuAtas) subMenuAtas.classList.add('d-none'); 
   
   if (btnMenuInduk && btnMenuInduk.parentElement) {
       btnMenuInduk.parentElement.classList.remove('selected', 'active');
@@ -1154,8 +980,8 @@ function updateNavigationUI(fragment) {
   let isDetailView = (fragment !== '' && fragment !== 'hasil' && fragment !== 'about' && fragment !== 'tutorial' && fragment !== 'medsos' && PrimaryDataIsLoaded && (fragment in Records));
 
   if (isDetailView) {
-    navStandar.style.display = 'none';
-    navDetail.style.display = 'flex';
+    navStandar.classList.add('d-none');
+    navDetail.classList.remove('d-none');
     
     let btnPrev = document.getElementById('btn-prev');
     let btnNext = document.getElementById('btn-next');
@@ -1173,31 +999,23 @@ function updateNavigationUI(fragment) {
       let nextIndex = (currentIndex === totalItems - 1) ? 0 : (currentIndex + 1);
 
       btnPrev.href = '#' + currentFilteredRecords[prevIndex].id;
-      btnPrev.style.opacity = '1';
-      btnPrev.style.pointerEvents = 'auto';
+      btnPrev.classList.remove('nav-disabled');
 
       btnNext.href = '#' + currentFilteredRecords[nextIndex].id;
-      btnNext.style.opacity = '1';
-      btnNext.style.pointerEvents = 'auto';
+      btnNext.classList.remove('nav-disabled');
     } else {
       btnPrev.removeAttribute('href');
-      btnPrev.style.opacity = '0.1';
-      btnPrev.style.pointerEvents = 'none';
+      btnPrev.classList.add('nav-disabled');
 
       btnNext.removeAttribute('href');
-      btnNext.style.opacity = '0.1';
-      btnNext.style.pointerEvents = 'none';
+      btnNext.classList.add('nav-disabled');
     }
 
   } else {
-    navStandar.style.display = 'flex';
-    navDetail.style.display = 'none';
+    navStandar.classList.remove('d-none');
+    navDetail.classList.add('d-none');
   }
 
-  // =======================================================
-  // KUNCI PERBAIKAN B: ATUR LAMPU NAVIGASI DINAMIS
-  // =======================================================
-  
   document.querySelectorAll('#nav-standar > li, #nav-detail > li').forEach(li => {
     li.classList.remove('selected', 'active');
   });
@@ -1208,24 +1026,18 @@ function updateNavigationUI(fragment) {
     let hrefVal = link.getAttribute('href');
     let linkId = link.getAttribute('id');
     
-    // 1. Lampu Beranda menyala jika fragment kosong
     if ((fragment === '' || fragment === 'landing') && hrefVal === '#') {
       li.classList.add('selected');
     } 
-    // 2. Lampu Hasil menyala
     else if (fragment === 'hasil' && hrefVal === '#hasil') {
       li.classList.add('selected');
     } 
-    // 3. Lampu "Lainnya" menyala jika kita sedang membuka Tentang, Tutorial, atau Medsos
     else if ((fragment === 'about' || fragment === 'tutorial' || fragment === 'medsos') && linkId === 'btn-menu-induk') {
       li.classList.add('selected');
     }
   });
 }
 
-// =========================================================
-// FUNGSI PEMBANTU: Menarik & Merapikan Metadata Gambar
-// =========================================================
 function tarikMetadataCaption(filename, targetId, targetNode = null) {
   let url = new URL(COMMONS_API_URL);
   let params = {
@@ -1234,7 +1046,6 @@ function tarikMetadataCaption(filename, targetId, targetNode = null) {
   };
   Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
-  // Gunakan sinyal Abort hanya untuk tarikan pertama (bukan saat memperbaiki yang nyangkut)
   let fetchOptions = {};
   if (!targetNode && typeof globalFetchController !== 'undefined') {
     fetchOptions.signal = globalFetchController.signal;
@@ -1246,7 +1057,6 @@ function tarikMetadataCaption(filename, targetId, targetNode = null) {
       let pages = data.query.pages;
       let page = Object.values(pages)[0];
       
-      // Deteksi elemen target (Bisa lewat ID, bisa lewat Node langsung)
       let targetCaption = targetNode || document.getElementById(targetId);
       if (!targetCaption) return;
 
@@ -1275,19 +1085,12 @@ function tarikMetadataCaption(filename, targetId, targetNode = null) {
     });
 }
 
-// ============================================================
-// PINTASAN KEYBOARD (Navigasi Kiri & Kanan) - ANTI DOM THRASHING
-// ============================================================
-// Variabel penjaga agar sistem tahu tombol sedang ditahan
 let isArrowLeftHeld = false;
 let isArrowRightHeld = false;
 
-// 1. SAAT TOMBOL DITEKAN (Hanya untuk efek visual)
 window.addEventListener('keydown', function(e) {
   if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
 
-  // +++ KUNCI PENCEGAHAN LIGHTBOX +++
-  // Jika lightbox sedang terbuka, matikan fungsi panah keyboard!
   let lightbox = document.getElementById('eph-lightbox');
   if (lightbox && lightbox.classList.contains('aktif')) return;
 
@@ -1296,7 +1099,7 @@ window.addEventListener('keydown', function(e) {
     isArrowLeftHeld = true;
     
     let btnPrev = document.getElementById('btn-prev');
-    if (btnPrev && btnPrev.hasAttribute('href') && btnPrev.style.pointerEvents !== 'none') {
+    if (btnPrev && btnPrev.hasAttribute('href') && !btnPrev.classList.contains('nav-disabled')) {
       btnPrev.classList.add('active'); 
     }
   } 
@@ -1305,17 +1108,15 @@ window.addEventListener('keydown', function(e) {
     isArrowRightHeld = true;
     
     let btnNext = document.getElementById('btn-next');
-    if (btnNext && btnNext.hasAttribute('href') && btnNext.style.pointerEvents !== 'none') {
+    if (btnNext && btnNext.hasAttribute('href') && !btnNext.classList.contains('nav-disabled')) {
       btnNext.classList.add('active'); 
     }
   }
 });
 
-// 2. SAAT TOMBOL DILEPASKAN (Baru eksekusi perpindahan data)
 window.addEventListener('keyup', function(e) {
   if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
 
-  // +++ KUNCI PENCEGAHAN LIGHTBOX +++
   let lightbox = document.getElementById('eph-lightbox');
   if (lightbox && lightbox.classList.contains('aktif')) return;
 
@@ -1323,7 +1124,7 @@ window.addEventListener('keyup', function(e) {
     isArrowLeftHeld = false; 
     
     let btnPrev = document.getElementById('btn-prev');
-    if (btnPrev && btnPrev.hasAttribute('href') && btnPrev.style.pointerEvents !== 'none') {
+    if (btnPrev && btnPrev.hasAttribute('href') && !btnPrev.classList.contains('nav-disabled')) {
       btnPrev.classList.remove('active'); 
       window.location.hash = btnPrev.getAttribute('href'); 
     }
@@ -1332,7 +1133,7 @@ window.addEventListener('keyup', function(e) {
     isArrowRightHeld = false; 
     
     let btnNext = document.getElementById('btn-next');
-    if (btnNext && btnNext.hasAttribute('href') && btnNext.style.pointerEvents !== 'none') {
+    if (btnNext && btnNext.hasAttribute('href') && !btnNext.classList.contains('nav-disabled')) {
       btnNext.classList.remove('active'); 
       window.location.hash = btnNext.getAttribute('href'); 
     }
@@ -1343,7 +1144,6 @@ window.addEventListener('keyup', function(e) {
 // SISTEM LIGHTBOX UNTUK GAMBAR (DENGAN DUKUNGAN TOMBOL BACK)
 // =======================================================
 window.addEventListener('load', function() {
-  // 1. Suntikkan HTML Lightbox ke dalam Body secara otomatis
   let lightboxHtml = `
 <div id="eph-lightbox">
       <div class="lightbox-backdrop"></div>
@@ -1360,7 +1160,6 @@ window.addEventListener('load', function() {
   let imgElem = document.getElementById('lightbox-img');
   let linkElem = document.getElementById('lightbox-link');
 
-  // 2. Tangkap klik pada SEMUA gambar di panel dan popup peta
   document.addEventListener('click', function(e) {
     let targetImg = e.target.closest('#details figure img, .leaflet-popup-content img');
     
@@ -1389,17 +1188,13 @@ window.addEventListener('load', function() {
       linkElem.href = linkKeCommons || '#'; 
       lightbox.classList.add('aktif');
 
-      // +++ KUNCI PERBAIKAN TOMBOL BACK +++
-      // Tinggalkan jejak riwayat palsu agar saat tombol Back ditekan, halaman tidak berpindah
       window.history.pushState({ dalamLightbox: true }, null, window.location.href);
     }
   });
 
-  // 3. Tutup Lightbox saat area menghitam diklik manual
   backdrop.addEventListener('click', function() {
     lightbox.classList.remove('aktif');
     
-    // Jika ditutup manual, kita harus hapus jejak palsu tadi agar tombol Back tidak ngadat
     if (window.history.state && window.history.state.dalamLightbox) {
       window.history.back();
     }
@@ -1409,10 +1204,8 @@ window.addEventListener('load', function() {
     }, 300);
   });
 
-  // 4. TANGKAP TOMBOL "BACK" DARI HP ATAU BROWSER
   window.addEventListener('popstate', function(e) {
     if (lightbox.classList.contains('aktif')) {
-      // Jika Lightbox sedang aktif dan tombol Back ditekan, tutup Lightbox-nya!
       lightbox.classList.remove('aktif');
       
       setTimeout(() => { 
@@ -1422,26 +1215,24 @@ window.addEventListener('load', function() {
   });
 });
 
-// Mengatur tampilan dropdown berdasarkan kategori wilayah
 window.aturTampilanWilayah = function() {
   let jenis = document.getElementById('kategori-wilayah-utama').value;
   let wadahProvinsi = document.getElementById('wadah-provinsi');
   let wadahLuarNegeri = document.getElementById('wadah-luar-negeri');
   
   if (jenis === 'provinsi') {
-    wadahProvinsi.style.display = 'block';
-    wadahLuarNegeri.style.display = 'none';
+    wadahProvinsi.classList.remove('d-none');
+    wadahLuarNegeri.classList.add('d-none');
   } else if (jenis === 'luar_negeri') {
-    wadahProvinsi.style.display = 'none';
-    wadahLuarNegeri.style.display = 'block';
-    filterNegaraByBenua(); // Panggil filter agar selaras dengan benua pertama
+    wadahProvinsi.classList.add('d-none');
+    wadahLuarNegeri.classList.remove('d-none');
+    filterNegaraByBenua(); 
   } else {
-    wadahProvinsi.style.display = 'none';
-    wadahLuarNegeri.style.display = 'none';
+    wadahProvinsi.classList.add('d-none');
+    wadahLuarNegeri.classList.add('d-none');
   }
 };
 
-// Memfilter daftar negara berdasarkan benua yang dipilih
 window.filterNegaraByBenua = function() {
   let benua = document.getElementById('benua-input').value;
   let negaraSelect = document.getElementById('negara-input');
@@ -1450,18 +1241,17 @@ window.filterNegaraByBenua = function() {
   let firstVisible = false;
   options.forEach(opt => {
     if (opt.getAttribute('data-benua') === benua) {
-      opt.style.display = ''; // Munculkan
+      opt.classList.remove('d-none');
       if (!firstVisible) {
-        negaraSelect.value = opt.value; // Jadikan default opsi pertama yang muncul
+        negaraSelect.value = opt.value; 
         firstVisible = true;
       }
     } else {
-      opt.style.display = 'none'; // Sembunyikan
+      opt.classList.add('d-none'); 
     }
   });
 };
 
-// +++ TAMBAHAN: Bangunkan UI saat tab aktif kembali dari background +++
 window.addEventListener('pageshow', function(e) {
   let dropdown = document.getElementById('jenis-dropdown');
   let inputTxt = document.getElementById('jenis-input');
@@ -1470,11 +1260,9 @@ window.addEventListener('pageshow', function(e) {
     inputTxt.value = dropdown.value;
   }
   
-  // Sinkronkan juga kotak wilayah agar visualnya tidak tertipu
   if (typeof aturTampilanWilayah === 'function') aturTampilanWilayah();
 });
 
-// Taruh di bagian bawah file
 function resetFormWilayah() {
   let kategoriWilayah = document.getElementById('kategori-wilayah-utama');
   if (kategoriWilayah) {
