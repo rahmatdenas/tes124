@@ -711,3 +711,102 @@ optgroup option { padding-left: 10px; }
 
 /* Utilitas Struktur Panel */
 .header-flex { display: flex; align-items: flex-start; justify-content: space-between; margin-top: 10px; }
+
+/* ==========================================================================
+   11. UTILITAS & GAYA CABUTAN DARI HTML (BARU)
+   ========================================================================== */
+
+/* Preloader */
+.preloader-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: #fff; z-index: 999999;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* Bagian Beranda (Landing) */
+#landing {
+  flex-direction: column; 
+  padding: 17px 20px 75px; 
+  gap: 15px;
+}
+#landing h2 { margin: 0; }
+#landing label { font-weight: bold; }
+
+/* Komponen Form Kustom (Select & Input) */
+.form-input-kustom {
+  padding: 10px; 
+  border-radius: 5px; 
+  border: 1px solid #ccc; 
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Mengubah style bawaan option yang terkunci */
+select option:disabled {
+  font-weight: bold; 
+  color: black;
+}
+
+/* Tombol Tarik Data Utama */
+.btn-mulai-utama {
+  margin-top: 10px; 
+  padding: 12px; 
+  background-color: #7b0d0c; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  font-weight: 600; 
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Grid Filter di Halaman Hasil */
+.grid-3-col {
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 15px;
+}
+.col-span-2 { grid-column: span 2; min-width: 0; }
+.col-span-1 { grid-column: span 1; min-width: 0; }
+
+/* Container Hasil Pencarian */
+#index-container {
+  background: #f3e9e9; 
+  overflow-y: auto; 
+  flex-grow: 1;
+}
+
+/* Sistem Navigasi Bawah (Flexbox) */
+#nav-standar, #nav-detail {
+  display: flex; 
+  list-style: none; 
+  margin: 12px 0; 
+  padding: 0;
+}
+
+/* Sistem Menu Drop-up (Lainnya) */
+#submenu-atas {
+  min-width: 100%; 
+  position: absolute; 
+  bottom: 36px; 
+  right: 0; 
+  margin: 0px; 
+  list-style: none; 
+  flex-direction: column; 
+  z-index: 999;
+}
+
+/* Kelas Tata Letak Pendukung (Helpers) */
+.flex-1 { flex: 1; }
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.pos-relative { position: relative; }
+.cursor-pointer { cursor: pointer; }
+.fw-bold { font-weight: bold; }
+.mt-15 { margin-top: 15px; }
+.my-15 { margin-top: 15px; margin-bottom: 15px; }
+.pt-15 { padding-top: 15px; }
+.ml-0 { margin-left: 0px !important; }
