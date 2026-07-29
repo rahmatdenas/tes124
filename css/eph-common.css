@@ -788,6 +788,7 @@ select option:disabled {
 
 /* Sistem Menu Drop-up (Lainnya) */
 #submenu-atas {
+   display: flex;
   min-width: 100%; 
   position: absolute; 
   bottom: 36px; 
