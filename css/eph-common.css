@@ -490,7 +490,7 @@ optgroup option { padding-left: 10px; }
   box-sizing: border-box;
   margin-bottom: 17px;
 }
-#details figure > a { display: block; border: 1px solid #ccc; text-decoration: none; }
+#details figure > a:not(.sunting-linktambah) { display: block; border: 1px solid #ccc; text-decoration: none; }
 #details figure img {
   display: block;
   border: 2px solid #fff;
