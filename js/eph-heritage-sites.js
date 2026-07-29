@@ -411,7 +411,7 @@ async function populateImageAndWikipediaData() {
         let encodedFilename = encodeURIComponent(record.imageFilename);
         let imgUrl = `${COMMONS_WIKI_URL_PREF}Special:FilePath/${encodedFilename}?width=250`;
         let imgHtml = `
-          <div style="text-align:center; margin-top:17px;margin-bottom: 5px;">
+          <div style="text-align:center; margin-top:17px;margin-bottom: 5px;min-width:90px;">
             <img src="${imgUrl}" draggable="false" style="width:100%; min-width:90px; height:130px; object-fit:cover; border-radius:4px;" onload="let p = Records['${cleanQid}'].popup; if (p) p.update();">
           </div>
         `;
