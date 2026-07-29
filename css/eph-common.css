@@ -967,7 +967,6 @@ position: absolute;
   position: relative;
   z-index: 10001;
   background: #eee;
-   padding:10px;
   max-width: 90vw;
   max-height: 90vh;
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
