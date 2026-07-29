@@ -993,7 +993,6 @@ position: absolute;
   /* Dikurangi 55px untuk mengakomodasi padding atas-bawah (20px) + tinggi teks & margin (~35px) */
   max-height: calc(90vh - 55px); 
   display: block;
-  margin-bottom: 8px; 
   min-height: 0;          /* KUNCI SAFARI: Membantu flexbox agar gambar bisa mengecil */
 }
 .leaflet-popup-content img {
