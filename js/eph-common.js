@@ -1348,8 +1348,8 @@ window.addEventListener('load', function() {
     <div id="eph-lightbox">
       <div class="lightbox-backdrop"></div>
       <div class="lightbox-content" style="display: flex; flex-direction: column; align-items: center;">
-<img id="lightbox-img" src="" alt="Gambar Diperbesar" style="max-width: 100%; max-height: calc(90vh - 55px); width: auto; height: auto; display: block;margin-bottom: 8px; ">
-<a id="lightbox-link" href="#" target="_blank" style="color: #888; text-decoration: none; font-size:10px;flex-shrink: 0; line-height: 1;">Lihat di Wikimedia Commons</a>
+<img id="lightbox-img" src="" alt="Gambar Diperbesar" style="max-width: 100%; max-height: calc(90vh - 55px); width: auto; height: auto; display: block;margin-bottom: 8px;min-height: 0;  ">
+<a id="lightbox-link" href="#" target="_blank" style="color: #888; text-decoration: none; font-size:10px;flex-shrink: 0; line-height: 1;font-family: 'Open Sans', sans-serif;">Lihat di Wikimedia Commons</a>
       </div>
     </div>
   `;
