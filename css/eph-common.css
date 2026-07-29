@@ -632,7 +632,7 @@ height: 16px;
   color: #a22;
 }
 #details .wikipedia-link a:hover { background: #eee; }
-.lightbox-content a:hover { background: #eee; color: gray;}
+.lightbox-content a:hover { background: #882222; color: #bf9090;}
 
 #details .wikipedia-link a img {
   display: inline-block;
@@ -966,7 +966,7 @@ position: absolute;
 .lightbox-content {
   position: relative;
   z-index: 10001;
-  background: #882222;
+  background: #eee;
   max-width: 90vw;
   max-height: 90vh;
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
@@ -977,7 +977,7 @@ position: absolute;
 /* Tautan Wikimedia */
 .lightbox-content a {
   outline: none;
-    color: #bf9090;
+color: gray;
   text-decoration: none;
   font-size: 10px;
   font-family: 'Open Sans', sans-serif;
