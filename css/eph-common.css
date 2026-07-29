@@ -256,6 +256,14 @@ nav li.active > a, nav li > a.active {
   margin-bottom: 12px;
 }
 
+#wadah-provinsi select, #wadah-luar-negeri select {
+  margin-top: 10px;
+}
+
+#wadah-luar-negeri select:first-of-type {
+  margin-bottom: 10px;
+}
+
 .filter-box, #kategori-wilayah-utama, #benua-input, #provinsi-input, #negara-input , #jenis-dropdown {
   position: relative;
   border-radius: 6px;
