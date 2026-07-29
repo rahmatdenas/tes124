@@ -10,42 +10,31 @@ html, body {
 body {
   display: flex;
   align-items: stretch;
-  
-  /* 1. KUNCI UTAMA: Matikan seleksi teks secara global di seluruh aplikasi */
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
-/* 2. ANTI-KILATAN: Hilangkan warna biru/hitam pekat saat elemen diklik di HP */
 * {
   -webkit-tap-highlight-color: transparent;
-}
-
-/* 3. ANTI-MENU HANTU: Blokir pop-up tahan lama (salin link/menu pop-up internal HP) */
-* {
   -webkit-touch-callout: none;
 }
 
 /* ==========================================================================
    ZONA PENGECUALIAN (AMNESTI FITUR)
    ========================================================================== */
-
-/* A. Pastikan kotak input, select, dan textarea tetap bisa diketik & dipilih teksnya */
 input, textarea, select {
   -webkit-user-select: text;
   user-select: text;
 }
 
-/* B. Izinkan seleksi teks HANYA saat masuk di panel Details dan About */
 #details, #details *, 
 #about, #about * {
   -webkit-user-select: text;
   user-select: text;
 }
 
-/* C. Izinkan LONG-PRESS khusus untuk Gambar Utama dan Gambar Arsip Sejarah */
 #details figure img,
 #details img,
 .arsip-block img,
@@ -53,9 +42,7 @@ input, textarea, select {
   -webkit-touch-callout: default;
 }
 
-.leaflet-popup-tip-container {
-   margin-top:-1px;
-}
+.leaflet-popup-tip-container { margin-top:-1px; }
 
 .efeklogo {
   opacity: 0.6;
@@ -68,13 +55,12 @@ input, textarea, select {
   transform: scale(1.15); 
 }
 
-/* Animasi Loader (Sudah digabung dengan warna dari CSS2) */
 .loader {   
   border-radius: 50%;
   width: 40px;
   height: 40px;
   font-size: 10px;
-    text-indent: -9999em;
+  text-indent: -9999em;
   border: 4px solid rgba(136, 34, 34, 0.2);
   border-left-color: #822;
   transform: translateZ(0);
@@ -93,44 +79,40 @@ input, textarea, select {
   display: flex;
   flex-direction: column;
   flex: 0 1 500px;
-   height: 100%;
+  height: 100%;
 }
-   .panel-content, 
-  #index-list {
-        padding-bottom:48px;
-    }
+
+.panel-content, 
+#index-list {
+  padding-bottom: 48px;
+}
 
 #navigasi-utama {
-    position: fixed !important;
-    bottom: 0;
-    left: 0;
-    width: 500px; /* KUNCI: Disamakan persis dengan lebar #panel milikmu */
-    z-index: 9999;
-        background: #6f0909;
-  }
+  position: fixed !important;
+  bottom: 0;
+  left: 0;
+  width: 500px;
+  z-index: 9999;
+  background: #6f0909;
+}
 
 #branding {
   font-family: "Open Sans", sans-serif;
-  
-  /* --- KUNCI PERBAIKAN: FLEXBOX --- */
   display: flex; 
-  align-items: center; /* Memastikan ikon dan teks sejajar di tengah secara vertikal */
-  padding: 25px 20px; /* Ruang bingkai dipindah ke sini agar menaungi ikon dan teks sekaligus */
-   background: #7b0d0c;
+  align-items: center;
+  padding: 25px 20px; 
+  background: #7b0d0c;
 }
 
-/* --- PENGATURAN IKON BARU --- */
 #branding-icon {
-  width: 45px; /* Silakan sesuaikan ukuran ini jika ikonnya terlalu besar/kecil */
+  width: 45px; 
   height: 45px;
-  margin-left: auto; /* Jarak antara ikon dan blok teks di kanannya */
-  object-fit: contain; /* Memastikan ikon tidak gepeng/distorsi */
+  margin-left: auto; 
+  object-fit: contain; 
 }
 
-/* --- PENYESUAIAN TEKS --- */
 #branding h1 {
-  /* Margin kiri/kanan/atas dihapus (karena sudah diwakili padding #branding) */
-  margin: 0 0 10px 0; /* Tetap pertahankan jarak 10px ke bawah menuju subjudul */
+  margin: 0 0 10px 0; 
   padding: 0;
   font-size: 24px;
   font-weight: 600;
@@ -139,7 +121,7 @@ input, textarea, select {
 }
 
 #branding p {
-  margin: 0; /* Semua margin dihapus */
+  margin: 0; 
   padding: 0;
   font-size: 12px;
   line-height: 12px;
@@ -148,6 +130,7 @@ input, textarea, select {
   letter-spacing: 0.5px;
   color: #a65959;
 }
+
 /* ==========================================================================
    3. NAVIGASI (Sistem Flexbox)
    ========================================================================== */
@@ -163,14 +146,14 @@ nav ul li {
   padding: 0;
 }
 
-#nav-standar > li:nth-child(1), #nav-detail > li:nth-child(1) { padding-left:20px;}
-#nav-standar > li:nth-child(2), #nav-detail > li:nth-child(2) { border-right: 1px solid #ba9082;    border-left: 1px solid #ba9082;}
-#nav-standar > li:nth-child(3), #nav-detail > li:nth-child(3) { padding-right:20px;}
+#nav-standar > li:nth-child(1), #nav-detail > li:nth-child(1) { padding-left:20px; }
+#nav-standar > li:nth-child(2), #nav-detail > li:nth-child(2) { border-right: 1px solid #ba9082; border-left: 1px solid #ba9082; }
+#nav-standar > li:nth-child(3), #nav-detail > li:nth-child(3) { padding-right:20px; }
 
 nav li a {
-  display: block; /* Mengubah inline-block menjadi block agar memenuhi seluruh area <li> */
-  width: 100%;    /* Memastikan area klik meregang penuh dari ujung ke ujung blok */
-  box-sizing: border-box; /* Menjaga ukuran tetap pas meski ada padding */
+  display: block; 
+  width: 100%;   
+  box-sizing: border-box; 
   padding: 6px 0;
   font-size: 12px;
   line-height: 12px;
@@ -191,48 +174,33 @@ nav li.active > a, nav li > a.active {
 }
 
 #submenu-atas li a {
-padding: 14px 20px;
+  padding: 14px 20px;
 }
 
 #submenu-atas li a:hover {
-    background: #7b0d0c;
-   color: #fff;
+  background: #7b0d0c;
+  color: #fff;
 }
 
-/* ANIMASI BISA DIHAPU SAJA */
 @keyframes slideNaik {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
-.kelas-submenu-mu  li {
-    background: #f5f5f5db;
-   height: 40px;
-   margin-top:1px;
-}
-.kelas-submenu-mu  li a {
-  color:#640c0b;
-}
-/* 1. Pengaturan dasar untuk semua <li> */
+
 .kelas-submenu-mu li {
-  /* KUNCI: Ubah 'forwards' menjadi 'both' agar elemen bersembunyi saat menunggu delay */
+  background: #f5f5f5db;
+  height: 40px;
+  margin-top:1px;
   animation: slideNaik 0.2s ease-out both;
   will-change: transform, opacity; 
 }
+.kelas-submenu-mu li a { color:#640c0b; }
 .kelas-submenu-mu li:nth-child(1) { animation-delay: 0.0s; }
-/* Anak ke-2 telat 0.1 detik */
 .kelas-submenu-mu li:nth-child(2) { animation-delay: 0.1s; }
-/* Anak ke-3 telat 0.2 detik */
 .kelas-submenu-mu li:nth-child(3) { animation-delay: 0.2s; }
-/* Anak ke-4 telat 0.3 detik */
 .kelas-submenu-mu li:nth-child(4) { animation-delay: 0.3s; }
-/* Anak ke-5 telat 0.4 detik */
 .kelas-submenu-mu li:nth-child(5) { animation-delay: 0.4s; }
 
-/* Mengunci warna tombol navigasi agar tidak kembali ke hitam bawaan browser */
 #nav-detail a, 
 #nav-detail a:not([href]) {
   color: #bf9090; 
@@ -259,8 +227,9 @@ padding: 14px 20px;
 /* ==========================================================================
    5. INDEKS (Dropdown, Filter & Pencarian)
    ========================================================================== */
+/* Tampilkan flex jika defaultnya memang flex (dikendalikan via JS d-none) */
 #index {
-  display: none;
+  display: flex;
   flex-direction: column;
   font-family: "Open Sans", sans-serif;
 }
@@ -269,10 +238,7 @@ padding: 14px 20px;
   font-family: "Open Sans", sans-serif;
 }
 
-#index header {
-  padding: 15px 20px;
-}
-
+#index header { padding: 15px 20px; }
 #index header label {
   display: block;
   text-transform: uppercase;
@@ -282,7 +248,6 @@ padding: 14px 20px;
   font-weight: 700;
   color: #eaa;
 }
-
 
 .filter-row {
   display: flex;
@@ -304,6 +269,9 @@ padding: 14px 20px;
   color: #611;  
 }
 
+/* PENGGANTI JS: Otomatis berubah warna jika input berstatus readonly */
+#jenis-input:read-only { background-color: #f5f5f5; }
+#jenis-input:not(:read-only) { background-color: #ffffff; }
 
 #provinsi-input, #kategori-wilayah-utama, #benua-input, #negara-input , #jenis-dropdown {
   background-color: #f5f5f5;
@@ -326,11 +294,7 @@ padding: 14px 20px;
 }
 
 select:-moz-focusring { color: transparent; text-shadow: 0 0 0 #000; }
-
-/* MEMBUNUH DELAY 300ms BAWAAN LAYAR SENTUH */
-a, button, select, input, textarea, .feat-btn, .filter-box {
-  touch-action: manipulation !important;
-}
+a, button, select, input, textarea, .feat-btn, .filter-box { touch-action: manipulation !important; }
 
 optgroup {
   padding: 6px 6px 3px;
@@ -340,18 +304,10 @@ optgroup {
   color: #a44;
   font-style: normal;
 }
-
-option {
-  font-size: 12.5px;
-  text-transform: initial;
-  padding: 3px;
-  color: #000;
-}
-
+option { font-size: 12.5px; text-transform: initial; padding: 3px; color: #000; }
 select > option { margin: 0 6px; }
 optgroup option { padding-left: 10px; }
 
-/* Tombol Fitur */
 .feat-btn {
   background-color: #f3e9e9;
   border: 1px solid #eaa;
@@ -371,7 +327,6 @@ optgroup option { padding-left: 10px; }
   cursor: not-allowed;
 }
 
-/* 2. Kunci efek hover HANYA untuk PC / perangkat dengan kursor */
 @media (hover: hover) {
   .feat-btn:hover {
     background-color: #eaa;
@@ -385,7 +340,6 @@ optgroup option { padding-left: 10px; }
   border-color: #822;
 }
 
-/* Kotak Pencarian */
 #search-input {
   appearance: none;
   -webkit-appearance: none;
@@ -395,7 +349,7 @@ optgroup option { padding-left: 10px; }
   border-bottom: 1px solid #eaa;
   font-size: 13px;
   line-height: 20px;
-  padding: 10px 20px 15px; /* Padding kanan 20px sudah cukup untuk ikon */
+  padding: 10px 20px 15px; 
   width: 100%;
   box-sizing: border-box;
   display: block;
@@ -404,23 +358,14 @@ optgroup option { padding-left: 10px; }
   background-color: transparent;
   height: 38px;
   flex-shrink: 0;
-
-  /* Ikon Kaca Pembesar di Kanan */
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill='%23888888' d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
-background-position: calc(100% - 15px) calc(50% - 3px);
+  background-position: calc(100% - 15px) calc(50% - 3px);
   background-size: 20px 20px;
 }
 
-#search-input:focus {
-  border-bottom: 1px solid #822;
-}
-
-/* SAAT ADA ISI: Hilangkan Kaca Pembesar */
-#search-input:not(:placeholder-shown) {
-  background-image: none;
-}
-
+#search-input:focus { border-bottom: 1px solid #822; }
+#search-input:not(:placeholder-shown) { background-image: none; }
 #search-input::-webkit-search-cancel-button {
   appearance: none;
   -webkit-appearance: none;
@@ -431,8 +376,8 @@ background-position: calc(100% - 15px) calc(50% - 3px);
   background-position: center;
   background-repeat: no-repeat;
   cursor: pointer;
-  margin: 0 -15px 0 0;}
-
+  margin: 0 -15px 0 0;
+}
 #search-input:not(:placeholder-shown)::-webkit-search-cancel-button {
   display: block !important;
   opacity: 1 !important;
@@ -450,18 +395,8 @@ background-position: calc(100% - 15px) calc(50% - 3px);
   padding: 0;
   background: #f3e9e9;
 }
-
-#index-list li {
-  margin: 0;
-  padding: 0;
-  -webkit-touch-callout: none;
-}
-
-  #index-list li:hover {
-    background: #eaa;
-    box-shadow: 0 -1px #eaa;
-  }
-
+#index-list li { margin: 0; padding: 0; -webkit-touch-callout: none; }
+#index-list li:hover { background: #eaa; box-shadow: 0 -1px #eaa; }
 #index-list li a {
   display: block;
   margin: 0 20px;
@@ -473,27 +408,18 @@ background-position: calc(100% - 15px) calc(50% - 3px);
   text-decoration: none;
   color: #000;
 }
-
-#index-list li:last-child a {
-  border-bottom: none;
-}
+#index-list li:last-child a { border-bottom: none; }
 
 /* ==========================================================================
    7. PANEL DETAIL BANGUNAN
    ========================================================================== */
+/* Tampilkan block jika dipanggil secara default lewat JS */
 #details {
-  display: none;
-padding-top: 17px;
-padding-left: 20px;
-padding-right: 20px;
-padding-bottom: 65px;
+  display: block;
+  padding: 17px 20px 65px;
 }
 
-#details .main-wikidata-link {
-    display: block;
-height: 16px;
-}
-
+#details .main-wikidata-link { display: block; height: 16px; }
 #details h1 {
   margin: 0 0 17px;
   padding: 0 0 5px;
@@ -505,10 +431,8 @@ height: 16px;
   color: #611;
   letter-spacing: -1px;
 }
-
 #details h1 .subtitle { font-size: 0.75em; }
 #details h1 .subtitle::before { content: '\a'; white-space: pre; }
-
 #details h2 {
   clear: right;
   padding-top: 12px;
@@ -522,9 +446,7 @@ height: 16px;
   text-transform: uppercase;
   color: #666;
 }
-
 #details p + h2 { margin-top: 15px; }
-
 #details p, #details li {
   margin: 0;
   padding: 0;
@@ -539,14 +461,12 @@ height: 16px;
   font-style: italic;
   color: #888;
 }
-
 #details .main-text { padding: 0 170px 0 0; }
 #details .main-text .loader { margin: 40px auto 57px; }
 #details .main-text p:first-child { margin-top: -5px; }
-
+.arsip-block { overflow: hidden; } /* JS FIX */
 .arsip-block p { padding-bottom: 15px !important; }
 
-/* --- Gambar & Figure --- */
 #details figure {
   float: right;
   clear: right;
@@ -558,7 +478,6 @@ height: 16px;
   font-family: Merriweather, serif;
   background: #f4f4f4;
 }
-
 #details figure.nodata {
   height: 100px;
   text-align: center;
@@ -571,13 +490,7 @@ height: 16px;
   box-sizing: border-box;
   margin-bottom: 17px;
 }
-
-#details figure > a {
-  display: block;
-      border: 1px solid #ccc;
-  text-decoration: none;
-}
-
+#details figure > a { display: block; border: 1px solid #ccc; text-decoration: none; }
 #details figure img {
   display: block;
   border: 2px solid #fff;
@@ -586,12 +499,7 @@ height: 16px;
   transition: max-height 0.3s ease-in-out;
   object-fit: cover;
 }
-
-#details figure img.loading {
-  background: #eee;
-   max-height: 0px;
-}
-
+#details figure img.loading { background: #eee; max-height: 0px; }
 #details figcaption {
   display: block;
   padding: 6px 0 0;
@@ -602,65 +510,24 @@ height: 16px;
   font-family: "Open Sans", sans-serif;
   font-weight: 400;
 }
-
-#details figcaption a {
-  border-bottom: 1px dotted #ccc;
-  text-decoration: none;
-  color: #888;
-}
-
-#details figcaption a:hover {
-  background: #eee;
-  border-bottom: 1px solid #eee;
-}
-
-#details p a.image, #details li a.image {
-  display: inline-block;
-  border: none;
-  margin-left: 10px;
-}
-
+#details figcaption a { border-bottom: 1px dotted #ccc; text-decoration: none; color: #888; }
+#details figcaption a:hover { background: #eee; border-bottom: 1px solid #eee; }
+#details p a.image, #details li a.image { display: inline-block; border: none; margin-left: 10px; }
 #details p a.image img, #details li a.image img { vertical-align: middle; }
 
-/* --- Tautan --- */
 #details .wikipedia-link { margin: 5px 0 0px; }
-#details .wikipedia-link a {
-  display: inline-block;
-  border: none;
-  line-height: 20px;
-  text-decoration: none;
-  color: #a22;
-}
+#details .wikipedia-link a { display: inline-block; border: none; line-height: 20px; text-decoration: none; color: #a22; }
 #details .wikipedia-link a:hover { background: #eee; }
-.lightbox-content a:hover { background: #882222; color: #bf9090;}
+.lightbox-content a:hover { background: #882222; color: #bf9090; }
+#details .wikipedia-link a img { display: inline-block; padding-right: 3px; vertical-align: bottom; background: #fff; }
+#details .wikipedia-link a span { display: inline-block; padding: 0 5px; height: 22px; line-height: 22px; }
 
-#details .wikipedia-link a img {
-  display: inline-block;
-  padding-right: 3px;
-  vertical-align: bottom;
-  background: #fff;
-}
-#details .wikipedia-link a span {
-  display: inline-block;
-  padding: 0 5px;
-  height: 22px;
-  line-height: 22px;
-}
-
-#details .sunting-linktambah {
-  text-decoration: none;
-  color: #888;
-  border-radius: 2px;
-  border-bottom: 1px dotted #ccc;
-}
-#details .sunting-linktambah:hover {
-  border-bottom: 1px solid #eee;
-  background: #eee;
-}
+#details .sunting-linktambah { text-decoration: none; color: #888; border-radius: 2px; border-bottom: 1px dotted #ccc; }
+#details .sunting-linktambah:hover { border-bottom: 1px solid #eee; background: #eee; }
 
 .sunting-link {
   display: inline-block;
-   flex-shrink: 0;
+  flex-shrink: 0;
   width: 13px;
   height: 13px;
   vertical-align: middle;
@@ -677,50 +544,16 @@ height: 16px;
 #details .koordinat-link a { text-decoration: none; color: #a22; }
 #details .koordinat-link a:hover { background: #eee; }
 
-/* --- Designations --- */
-#details .designations {
-  margin:-5px 0 0 0;
-  padding: 0 0 0px;
-  overflow: hidden;
-}
-#details .designations li {
-  position: relative;
-  list-style: none;
-  margin-right: 0;
-}
-#details .designations li h3 {
-  margin: 0;
-  padding: 0;
-  font-size: 1.15em;
-  font-weight: bold;
-}
+#details .designations { margin:-5px 0 0 0; padding: 0 0 0px; overflow: hidden; }
+#details .designations li { position: relative; list-style: none; margin-right: 0; }
+#details .designations li h3 { margin: 0; padding: 0; font-size: 1.15em; font-weight: bold; }
 #details .designations li .org { font-style: italic; color: #666; }
-#details .designations li .org img {
-  position: absolute;
-  top: 0; right: 0;
-  width: 50px;
-  height: 50px;
-}
-#details .designations li > p {
-  padding-left: 20px;
-  text-indent: -20px;
-}
-#details .designations li > p::before {
-  display: inline-block;
-  content: "■";
-  width: 20px;
-  text-indent: 0;
-  color: #888;
-}
+#details .designations li .org img { position: absolute; top: 0; right: 0; width: 50px; height: 50px; }
+#details .designations li > p { padding-left: 20px; text-indent: -20px; }
+#details .designations li > p::before { display: inline-block; content: "■"; width: 20px; text-indent: 0; color: #888; }
 #details .designations li .wikilinks { padding-left: 20px; text-indent: 0; }
 #details .designations li .wikilinks p { margin-top: 5px; }
-#details .designations li .wikilinks p a {
-  display: inline-block;
-  border: none;
-  text-indent: initial;
-  text-decoration: none;
-  color: #a22;
-}
+#details .designations li .wikilinks p a { display: inline-block; border: none; text-indent: initial; text-decoration: none; color: #a22; }
 #details .designations li .wikilinks p a:hover { background: #eee; }
 #details .designations li .wikilinks p a img { display: inline-block; padding-right: 3px; vertical-align: bottom; background: #fff; }
 #details .designations li .wikilinks p a span { display: inline-block; padding: 0 5px; height: 22px; line-height: 22px; }
@@ -728,70 +561,22 @@ height: 16px;
 /* ==========================================================================
    8. ABOUT & KONTRIB
    ========================================================================== */
-#about, #kontrib {
-  display: none;
-  padding: 20px;
-}
-
-#about h2, #kontrib h2 {
-  margin: 20px 0 10px;
-  font-size: 16px;
-  line-height: 16px;
-  font-family: "Open Sans", sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-#about #eph, #kontrib #eph {
-  float: right;
-  margin: 0 0 10px 10px;
-  width: 60px;
-}
-
-#about p, #kontrib p {
-  margin: 0 0 10px;
-  padding: 0;
-  font-size: 12.5px;
-  line-height: 22px;
-  font-family: Merriweather, serif;
-}
-
+#about, #kontrib { display: block; padding: 20px; }
+#about h2, #kontrib h2 { margin: 20px 0 10px; font-size: 16px; line-height: 16px; font-family: "Open Sans", sans-serif; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+#about #eph, #kontrib #eph { float: right; margin: 0 0 10px 10px; width: 60px; }
+#about p, #kontrib p { margin: 0 0 10px; padding: 0; font-size: 12.5px; line-height: 22px; font-family: Merriweather, serif; }
 #about p a, #kontrib p a { border-bottom: 1px dotted #ccc; text-decoration: none; color: #666; }
 #about p a:hover, #kontrib p a:hover { border-bottom: 1px solid #eee; background: #eee; }
-
-#kontrib h4 {
-  font-family: "Open Sans", sans-serif;
-  font-size: 13px;
-  color: #822;
-  font-style: oblique;
-}
-
-.grid-kontrib {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin: 20px 0;
-}
-
+#kontrib h4 { font-family: "Open Sans", sans-serif; font-size: 13px; color: #822; font-style: oblique; }
+.grid-kontrib { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
 .tombolkontrib {
   font-family: "Open Sans", sans-serif;
   font-size: 12.5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  height: 100px;
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
-  text-align: center;
-  line-height: 1.4;
-  background-color: #f3e9e9;
-  color: #822;
-  text-decoration: none;
-  border-radius: 4px;
-  border: 1px solid #eaa;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; height: 100px; width: 100%;
+  padding: 10px; box-sizing: border-box; text-align: center;
+  line-height: 1.4; background-color: #f3e9e9; color: #822;
+  text-decoration: none; border-radius: 4px; border: 1px solid #eaa;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 .tombolkontrib:hover { background-color: #822; color: #fff; cursor: pointer; }
@@ -800,22 +585,9 @@ height: 16px;
    9. MAP & LEAFLET COMPONENT
    ========================================================================== */
 #map { flex: 1; }
-
-.marker-cluster {
-  background-clip: padding-box;
-  border-radius: 20px;
-}
-
-.marker-cluster div {
-  margin: 5px 0 0 5px;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  border-radius: 15px;
-  font: bold 12px "Open Sans", sans-serif;
-}
+.marker-cluster { background-clip: padding-box; border-radius: 20px; }
+.marker-cluster div { margin: 5px 0 0 5px; width: 30px; height: 30px; text-align: center; border-radius: 15px; font: bold 12px "Open Sans", sans-serif; }
 .marker-cluster span { line-height: 30px; color: #fff; }
-
 .marker-cluster-small      { background-color: rgba(204, 68, 68, 0.5); }
 .marker-cluster-small  div { background-color: rgba(204, 68, 68, 0.8); }
 .marker-cluster-medium     { background-color: rgba(170, 51, 51, 0.5); }
@@ -823,259 +595,119 @@ height: 16px;
 .marker-cluster-large      { background-color: rgba(136, 34, 34, 0.5); }
 .marker-cluster-large  div { background-color: rgba(136, 34, 34, 0.8); }
 
-.leaflet-popup-content-wrapper, .leaflet-popup-tip {
-  background: #822;
-}
-
-.leaflet-popup-content {
-  font: 600 16px/20px "Open Sans", sans-serif;
-  color: #fff;
-  text-align: center;
-   margin: 10px 20px 10px 20px !important;
-   min-width:94px;
-}
-.leaflet-popup-content .subtitle {
-  padding: 2px 0 0;
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 700;
-}
-
-.powered {
-  line-height: 0.5;
-  background: #fff;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.leaflet-control-zoom, .leaflet-control-layers, .powered {
-  box-shadow: 0 1px 5px rgba(0,0,0,0.65);
-}
-
+.leaflet-popup-content-wrapper, .leaflet-popup-tip { background: #822; }
+.leaflet-popup-content { font: 600 16px/20px "Open Sans", sans-serif; color: #fff; text-align: center; margin: 10px 20px !important; min-width:94px; }
+.leaflet-popup-content .subtitle { padding: 2px 0 0; font-size: 12px; line-height: 16px; font-weight: 700; }
+.powered { line-height: 0.5; background: #fff; border-radius: 4px; overflow: hidden; }
+.leaflet-control-zoom, .leaflet-control-layers, .powered { box-shadow: 0 1px 5px rgba(0,0,0,0.65); }
 .leaflet-control-layers { border-radius: 4px; }
 .leaflet-control-layers-toggle { width: 26px; height: 26px; background-size: 18px 18px; }
-
 .leaflet-touch .leaflet-control-layers-toggle { width: 30px; height: 30px; background-size: 20px 20px; }
 .leaflet-touch .powered { box-shadow: none; border: 2px solid rgba(0,0,0,0.2); }
+.leaflet-bottom.leaflet-right { top: 50%; bottom: auto; transform: translateY(-50%); }
+.leaflet-top, .leaflet-bottom { width: 100%; }
+.leaflet-top .leaflet-control-attribution { text-align: center; width: 100%; padding: 0px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
-.leaflet-bottom.leaflet-right {
-    top: 50%;
-    bottom: auto;
-    transform: translateY(-50%);
-}
-
-.leaflet-top, .leaflet-bottom {
-       width: 100%;
-}
-
-.leaflet-top .leaflet-control-attribution {
-text-align: center;
-       width: 100%;
-   padding: 0px;
-      -webkit-text-size-adjust: 100%; /* Mematikan zoom font otomatis di Safari iOS */
-    text-size-adjust: 100%; /* Standar untuk browser lain */
-}
-/* === DESAIN IKON LINGKARAN GPS (CROSSHAIRS) === */
 .ikon-gps-custom {
-  display: block;
-  width: 18px;
-  height: 18px;
-  margin: auto;
+  display: block; width: 18px; height: 18px; margin: auto;
   background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="%23333333"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>');
-  background-size: contain;
-  background-repeat: no-repeat;
-position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-}
-/* Penyesuaian ukuran khusus untuk layar sentuh (HP) yang tombolnya membesar otomatis  belum tau gunanya apa */
-.leaflet-touch .ikon-gps-custom {
+  background-size: contain; background-repeat: no-repeat;
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
 }
 
-/* Efek Cincin Menyebar */
 @keyframes cluster-pulse-ring {
-  0% {
-    /* Warna awal, sesuaikan nilai RGB-nya jika ingin warna lain. Ini warna merah bata. */
-    box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); 
-  }
-  70% {
-    /* Cincin membesar hingga 20px dan memudar */
-    box-shadow: 0 0 0 20px rgba(204, 0, 0, 0); 
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(204, 0, 0, 0);
-  }
+  0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); }
+  70% { box-shadow: 0 0 0 20px rgba(204, 0, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0); }
 }
+.cluster-efek-denyut { animation: cluster-pulse-ring 1.5s infinite; border-radius: 50%; z-index: 1000 !important; }
 
-/* Kelas yang akan ditempelkan oleh JavaScript */
-.cluster-efek-denyut {
-  animation: cluster-pulse-ring 1.5s infinite;
-  border-radius: 50%; /* Memastikan bentuk denyutnya melingkar */
-  z-index: 1000 !important; /* Memastikan gelembung ini tampil di atas elemen peta lainnya */
-}
-
-.titik-gps-denyut {
-  width: 14px;
-  height: 14px;
-  background-color: #2A93EE; /* Warna biru GPS */
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 0 0 rgba(42, 147, 238, 0.5);
-  animation: denyutGPS 1.5s infinite;
-}
-
-@keyframes denyutGPS {
-  0% { box-shadow: 0 0 0 0 rgba(42, 147, 238, 0.7); }
-  70% { box-shadow: 0 0 0 15px rgba(42, 147, 238, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(42, 147, 238, 0); }
-}
 /* =======================================================
    EFEK LIGHTBOX UNTUK GAMBAR GALERI & ARSIP
    ======================================================= */
 #eph-lightbox {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
 }
-
-/* Kelas saat lightbox dipanggil */
-#eph-lightbox.aktif {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Area menghitam */
-.lightbox-backdrop {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.8); 
-  cursor: pointer; /* Memberi sinyal ini bisa diklik untuk tutup */
-}
-
-/* Wadah gambar & teks */
-.lightbox-content {
-  position: relative;
-  z-index: 10001;
-  background: #eee;
-  max-width: 90vw;
-  max-height: 90vh;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  display: flex;
-  flex-direction: column; /* Mengatur isi menjadi atas-bawah */
-}
-
-/* Tautan Wikimedia */
-.lightbox-content a {
-  outline: none;
-color: gray;
-  text-decoration: none;
-  font-size: 10px;
-  font-family: 'Open Sans', sans-serif;
-       text-align: center;
-   padding: 8px 10px 10px;
-}
-
-/* Gambar */
-.lightbox-content img {
-  max-width: 100%;
-  /* Dikurangi 55px untuk mengakomodasi padding atas-bawah (20px) + tinggi teks & margin (~35px) */
-  max-height: calc(90vh - 55px); 
-  display: block;
-  min-height: 0;          /* KUNCI SAFARI: Membantu flexbox agar gambar bisa mengecil */
-}
-.leaflet-popup-content img {
-  cursor: pointer;
-}
+#eph-lightbox.aktif { opacity: 1; visibility: visible; }
+.lightbox-backdrop { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); cursor: pointer; }
+.lightbox-content { position: relative; z-index: 10001; background: #eee; padding:10px; max-width: 90vw; max-height: 90vh; box-shadow: 0 4px 20px rgba(0,0,0,0.4); display: flex; flex-direction: column; }
+.lightbox-content a { outline: none; color: gray; text-decoration: none; font-size: 10px; font-family: 'Open Sans', sans-serif; text-align: center; padding: 8px 10px 10px; }
+.lightbox-content img { max-width: 100%; max-height: calc(90vh - 55px); display: block; min-height: 0; }
+.leaflet-popup-content img { cursor: pointer; }
 
 /* =======================================================
    KOTAK KONFIRMASI / ALERT KUSTOM
    ======================================================= */
 #eph-dialog-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: 10005; /* Harus lebih tinggi dari lightbox (10000) */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10005; 
+  display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease;
 }
+#eph-dialog-overlay.aktif { opacity: 1; visibility: visible; }
+.eph-dialog-box { background: #fff; font-family: "Open Sans", sans-serif; border-radius: 6px; padding: 20px; width: 85%; max-width: 320px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); text-align: center; }
+.eph-dialog-box h3 { margin: 0 0 10px; color: #611; font-size: 18px; }
+.eph-dialog-box p { margin: 0 0 20px; color: #444; font-size: 13.5px; line-height: 1.6; }
+.eph-dialog-actions { display: flex; justify-content: center; gap: 10px; }
+.eph-dialog-actions button { flex: 1; padding: 10px; border-radius: 4px; font-size: 13px; font-weight: bold; cursor: pointer; border: none; transition: background-color 0.2s, color 0.2s; -webkit-tap-highlight-color: transparent; }
+.btn-dialog-batal { background: #f3e9e9; color: #822; }
+.btn-dialog-batal:hover { background: #eaa; color: #fff; }
+.btn-dialog-ya { background: #7b0d0c; color: #fff; }
+.btn-dialog-ya:hover { background: #a22; }
 
-#eph-dialog-overlay.aktif {
-  opacity: 1;
-  visibility: visible;
-}
 
-.eph-dialog-box {
-  background: #fff;
-   font-family: "Open Sans", sans-serif;
-  border-radius: 6px;
-  padding: 20px;
-  width: 85%;
-  max-width: 320px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  text-align: center;
-}
+/* ==========================================================================
+   10. ZONA UTILITAS & KELAS DINAMIS (PENGGANTI INLINE STYLE DARI JS)
+   ========================================================================== */
 
-.eph-dialog-box h3 {
-  margin: 0 0 10px;
-  color: #611;
-  font-size: 18px;
-}
+/* Layout & Visibility */
+.d-none { display: none !important; }
+.d-block { display: block !important; }
+.d-flex { display: flex !important; }
+.hide-preloader { opacity: 0; visibility: hidden; }
 
-.eph-dialog-box p {
-  margin: 0 0 20px;
-  color: #444;
-  font-size: 13.5px;
-  line-height: 1.6;
-}
+/* Tipografi & Warna Bantuan */
+.text-alert-bold { color: #7b0d0c; font-weight: bold; }
+.log-text { font-family: monospace; font-size: 11px; color: #888; }
+.text-muted-italic { font-style: italic; color: #888; }
+.text-italic { font-style: italic; }
+.text-error { color: #cc0000 !important; }
+.break-all { word-break: break-all; }
+.no-border { border: none; }
 
-.eph-dialog-actions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
+/* Spacing Helpers */
+.mt-8 { margin-top: 8px; }
+.mt-10 { margin-top: 10px; }
+.mt-42 { margin-top: 42px; }
+.mb-0 { margin-bottom: 0 !important; }
+.mb-7 { margin-bottom: 7px; }
+.mb-10 { margin-bottom: 10px; }
+.mr-7 { margin-right: 7px; }
 
-.eph-dialog-actions button {
-  flex: 1;
-  padding: 10px;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.2s, color 0.2s;
-  -webkit-tap-highlight-color: transparent;
-}
+/* Komponen State Kosong (Menyeragamkan panel error & notifikasi data kosong) */
+.empty-state-container { padding: 40px 20px; text-align: center; line-height: 1.6; }
+.empty-state-title { margin-bottom: 10px; margin-top: 0; color: #333; }
+.empty-state-desc { color: #666; font-size: 14px; margin-bottom: 25px; }
 
-.btn-dialog-batal {
-  background: #f3e9e9;
-  color: #822;
-}
-
-.btn-dialog-batal:hover {
-  background: #eaa;
+/* Tombol Utama Global */
+.btn-primary-large {
+  background-color: #7b0d0c;
   color: #fff;
+  padding: 12px 25px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 600;
+  display: inline-block;
+  transition: background-color 0.2s;
 }
+.btn-primary-large:hover { background-color: #a22; }
+.nav-disabled { opacity: 0.1 !important; pointer-events: none !important; }
 
-.btn-dialog-ya {
-  background: #7b0d0c;
-  color: #fff;
-}
+/* Penyesuaian Loader & Gambar Pop-up */
+.loader-center { margin: 0 auto; width: 40px; height: 40px; border-width: 4px; }
+.loader-small { width: 20px !important; height: 20px !important; border-width: 2px !important; }
+.popup-img-container { text-align: center; margin-top: 17px; margin-bottom: 5px; }
+.popup-img { width: 100%; min-width: 90px; height: 130px; object-fit: cover; border-radius: 4px; }
 
-.btn-dialog-ya:hover {
-  background: #a22;
-}
+/* Utilitas Struktur Panel */
+.header-flex { display: flex; align-items: flex-start; justify-content: space-between; margin-top: 10px; }
