@@ -958,29 +958,41 @@ position: absolute;
   cursor: pointer; /* Memberi sinyal ini bisa diklik untuk tutup */
 }
 
-/* Wadah gambar */
+/* Wadah gambar & teks */
 .lightbox-content {
   position: relative;
   z-index: 10001;
-  padding: 10px; /* Jarak antara batas border dengan gambar */
+  padding: 10px;
   background: #fff;
   border-radius: 4px;
-  max-width: 90vw; /* Sisakan ruang kiri-kanan di layar HP */
-  max-height: 90vh; /* Sisakan ruang atas-bawah */
+  max-width: 90vw;
+  max-height: 90vh;
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
   display: flex;
+  flex-direction: column; /* Mengatur isi menjadi atas-bawah */
+  align-items: center;    /* Memastikan gambar & teks di tengah */
 }
 
+/* Tautan Wikimedia */
 .lightbox-content a {
   display: block;
   outline: none;
+  color: #888;
+  text-decoration: none;
+  font-size: 10px;
+  font-family: 'Open Sans', sans-serif;
+  flex-shrink: 0;         /* KUNCI SAFARI: Mencegah teks terdistorsi/memelar */
+  line-height: 1;         /* Menjaga tinggi teks tetap konsisten */
 }
 
+/* Gambar */
 .lightbox-content img {
   max-width: 100%;
-  max-height: calc(90vh - 24px); /* Mengakomodasi padding */
-  object-fit: contain; /* Memastikan gambar tidak terpotong */
+  /* Dikurangi 55px untuk mengakomodasi padding atas-bawah (20px) + tinggi teks & margin (~35px) */
+  max-height: calc(90vh - 55px); 
   display: block;
+  margin-bottom: 8px; 
+  min-height: 0;          /* KUNCI SAFARI: Membantu flexbox agar gambar bisa mengecil */
 }
 .leaflet-popup-content img {
   cursor: pointer;
