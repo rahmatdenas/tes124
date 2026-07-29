@@ -728,11 +728,11 @@ optgroup option { padding-left: 10px; }
 #landing {
   flex-direction: column; 
   padding: 17px 20px 75px; 
-  gap: 15px;
+  gap: 10px;
+  display: flex;
 }
-#landing h2 { margin-top:0;margin-bottom: 10px; }
+#landing h2 { margin:0 }
 #landing label { font-weight: bold; }
-#landing select, #landing input {margin:10px 0 10px;}
 
 /* Komponen Form Kustom (Select & Input) */
 .form-input-kustom {
