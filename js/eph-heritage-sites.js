@@ -5,7 +5,6 @@ var currentRenderIndex = 0;
 var currentFilteredRecords = [];
 var isFilterEventAttached = false; 
 
-// Fungsi pembelah array menjadi potongan kecil (Batching)
 function potongJadiKelompok(array, ukuran) {
   let hasilPotongan = [];
   for (let i = 0; i < array.length; i += ukuran) {
@@ -81,18 +80,16 @@ function loadPrimaryData() {
          return; 
        }
 
-       // Turunkan saklar karena proses sudah berhenti
        isFetching = false;
        PrimaryDataIsLoaded = false;
 
-       // Tampilkan pesan gagal ke pengguna
        let indexList = document.getElementById('index-list');
        if (indexList) {         
          indexList.innerHTML = `
-           <div style="padding: 40px 20px; text-align: center; line-height: 1.6;">
-             <h3 style="margin-bottom: 10px; margin-top:0; color: #cc0000;">Gagal Menarik Data</h3>
-             <p style="color: #666; font-size:14px; margin-bottom: 25px;">Pastikan internet stabil atau tutup dan coba lagi nanti. Jika data gagal dimuat karena terlalu banyak (lebih dari 20.000), silakan persempit pencarian.</p>
-             <a href="#" onclick="window.location.href = window.location.pathname; return false;" style="background-color: #7b0d0c; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: 600; display: inline-block;">Kembali</a>
+           <div class="empty-state-container">
+             <h3 class="empty-state-title text-error">Gagal Menarik Data</h3>
+             <p class="empty-state-desc">Pastikan internet stabil atau tutup dan coba lagi nanti. Jika data gagal dimuat karena terlalu banyak (lebih dari 20.000), silakan persempit pencarian.</p>
+             <a href="#" onclick="window.location.href = window.location.pathname; return false;" class="btn-primary-large">Kembali</a>
            </div>
          `;
        }
@@ -116,19 +113,12 @@ var currentNamaWilayah = 'Semua Wilayah';
 function populateProvinceTypesData() {
   let inputTxt = document.getElementById('jenis-input').value.trim();
   
-  // +++ KUNCI PERBAIKAN BUG UTAMA: BACA MENU KATEGORI BARU +++
   let kategoriUtama = document.getElementById('kategori-wilayah-utama').value;
   let provDropdown = document.getElementById('provinsi-input');
   let negaraDropdown = document.getElementById('negara-input');
   
-  // Trik agar sisa kode kueri SPARQL Anda di bawah tidak perlu diubah:
-  // Jika memilih provinsi, ambil nilainya (wd:...). Jika tidak, jadikan nilainya 'all' atau 'luar_negeri'
   let provInput = (kategoriUtama === 'provinsi') ? provDropdown.value : kategoriUtama; 
-  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   
-  // ==========================================
-  // 1. TENTUKAN VARIABEL GLOBAL & WILAYAH DARI HTML
-  // ==========================================
   let jenisDropdown = document.getElementById('jenis-dropdown');
   let opsiTerpilih = jenisDropdown.options[jenisDropdown.selectedIndex];
 
@@ -138,12 +128,10 @@ function populateProvinceTypesData() {
     currentNamaKlaster = opsiTerpilih.text; 
   }
 
-  // Tarik properti langsung dari HTML atribut
   currentKategoriUtama = opsiTerpilih.getAttribute('data-kategori') || 'general';
   let propLokasi = opsiTerpilih.getAttribute('data-lokasi') || 'P131';
   let propTahun = opsiTerpilih.getAttribute('data-tahun') || 'P571';
   
-  // +++ KUNCI PERBAIKAN NAMA JUDUL YANG MUNCUL SAAT LOADING +++
   if (kategoriUtama === 'luar_negeri') {
     currentNamaWilayah = negaraDropdown.options[negaraDropdown.selectedIndex].text;
   } else if (kategoriUtama === 'all') {
@@ -151,11 +139,7 @@ function populateProvinceTypesData() {
   } else {
     currentNamaWilayah = provDropdown.options[provDropdown.selectedIndex].text;
   }
-  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   
-  // ==========================================
-  // 2. PERBARUI TAMPILAN
-  // ==========================================
   let brandingDesc = document.getElementById('branding-desc');
   if (brandingDesc) {
     brandingDesc.textContent = `${currentNamaKlaster} di ${currentNamaWilayah}`;
@@ -164,20 +148,17 @@ function populateProvinceTypesData() {
   let indexList = document.getElementById('index-list');
   if (indexList) {
     indexList.innerHTML = `
-      <div style="padding: 40px 20px; text-align: center; line-height: 1.6;">
-        <h3 id="loading-text" style="margin-bottom: 10px; margin-top:0; color: #333;">
+      <div class="empty-state-container">
+        <h3 id="loading-text" class="empty-state-title">
           Sedang Menarik Data<br/>${currentNamaKlaster} di ${currentNamaWilayah}
         </h3>
-        <p style="color: #666; font-size:14px; margin-bottom: 25px;">Harap menunggu sebentar...</p>
-        <div class="loader" style="margin: 0 auto; width: 40px; height: 40px; border-width: 4px;"></div>
-      <div id="wadah-tombol-berhenti" style="margin-top: 42px;"></div>
+        <p class="empty-state-desc">Harap menunggu sebentar...</p>
+        <div class="loader loader-center"></div>
+      <div id="wadah-tombol-berhenti" class="mt-42"></div>
       </div>
     `;
   }
   
-  // ==========================================
-  // 3. FUNGSI PEMBANTU EKSEKUSI KUERI
-  // ==========================================
   function eksekusiKueriKeWikidata(kueriFinal) {
     console.log("Kueri yang dikirim:", kueriFinal);
     return queryWdqsPaginated(
@@ -219,9 +200,6 @@ function populateProvinceTypesData() {
     );
   }
 
-  // ==========================================
-  // 4. LOGIKA PEMILIHAN TEMPLATE KUERI
-  // ==========================================
   let baseQuery = KUMPULAN_KUERI_0['universal'];
   
   if (inputTxt.toLowerCase() === 'apapun') {
@@ -243,7 +221,6 @@ function populateProvinceTypesData() {
     filterNasional = '?s wdt:P407 wd:Q9240 .';
   }
 
-  // --- CABANG LUAR NEGERI ---
   if (provInput === 'luar_negeri') {
     let negaraDropdown = document.getElementById('negara-input');
     let negaraValue = negaraDropdown.value;
@@ -265,9 +242,6 @@ function populateProvinceTypesData() {
     return eksekusiKueriKeWikidata(dynamicQuery); 
   }
   
-  // ==========================================
-  // CABANG INDONESIA
-  // ==========================================
   if (provInput === 'all') {
     wilayahClause1 = '?p wdt:P31 wd:Q5098 .';
     
@@ -318,7 +292,6 @@ async function populateCoordinatesData() {
   let daftarQid = Object.keys(Records).map(id => 'wd:' + id);
   if (daftarQid.length === 0) return;
 
-  // Tarik parameter dari HTML secara langsung
   let jenisDropdown = document.getElementById('jenis-dropdown');
   let opsiTerpilih = jenisDropdown.options[jenisDropdown.selectedIndex];
   let namaKlaster = (jenisDropdown.value === 'custom') ? 'Objek' : opsiTerpilih.text;
@@ -405,20 +378,17 @@ async function populateImageAndWikipediaData() {
  if ('image' in result) {
       record.imageFilename = extractImageFilename(result.image);
       
-      // +++ KODE INJEKSI POPUP REAL-TIME +++
-      // Jika pengguna sedang membuka popup marker ini saat gambarnya baru saja tiba
       if (record.popup && record.popup.isOpen() && !record.popup._hasImage) {
         let encodedFilename = encodeURIComponent(record.imageFilename);
         let imgUrl = `${COMMONS_WIKI_URL_PREF}Special:FilePath/${encodedFilename}?width=250`;
         let imgHtml = `
-          <div style="text-align:center; margin-top:17px;margin-bottom: 5px;">
-            <img src="${imgUrl}" draggable="false" style="width:100%; min-width:90px; height:130px; object-fit:cover; border-radius:4px;" onload="let p = Records['${cleanQid}'].popup; if (p) p.update();">
+          <div class="popup-img-container">
+            <img src="${imgUrl}" draggable="false" class="popup-img" onload="let p = Records['${cleanQid}'].popup; if (p) p.update();">
           </div>
         `;
         record.popup.setContent(imgHtml + `${record.title}`);
         record.popup._hasImage = true;
       }
-      // ++++++++++++++++++++++++++++++++++++
     }
 
       if ('wikipediaUrlTitle' in result) {
@@ -450,14 +420,11 @@ try {
       if (btnImg) btnImg.classList.remove('disabled');
       if (btnArt) btnArt.classList.remove('disabled');
 
-      // +++ REFRESH PETA FINAL (Di luar loop) +++
       if (activeFeatures.has('image') || activeFeatures.has('article')) {
         applyIntersectionFilter(true); 
       }
-      // ++++++++++++++++++++++++++++++++++++++++
 
     } else {
-      // Blok kode jika data > 20000
       if (btnImg) btnImg.classList.remove('disabled');
       if (btnArt) btnArt.classList.remove('disabled');
       let batchSize = 3; 
@@ -482,11 +449,9 @@ try {
       if (btnImg) btnImg.textContent = 'Memiliki Gambar';
       if (btnArt) btnArt.textContent = 'Memiliki Artikel';
 
-      // +++ REFRESH PETA FINAL (Di luar loop) +++
       if (activeFeatures.has('image') || activeFeatures.has('article')) {
         applyIntersectionFilter(true); 
       }
-      // ++++++++++++++++++++++++++++++++++++++++
     }
   isFetching = false;
   } catch (error) {
@@ -698,7 +663,7 @@ function renderDynamicDataInPanel(qid) {
       }
       else if (key === 'lamanResmi') {
         const displayUrl = rawValue.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
-        formattedValue = `<span class="koordinat-link"><a href="${rawValue}" target="_blank" rel="noopener noreferrer" style="word-break: break-all;">${displayUrl}</a></span>`;
+        formattedValue = `<span class="koordinat-link"><a href="${rawValue}" target="_blank" rel="noopener noreferrer" class="break-all">${displayUrl}</a></span>`;
       }
       else if (key === 'tglTemu' || key === 'tglWafat' || key === 'berakhirPada'){
         let [waktu, presisi] = rawValue.split('|');
@@ -715,7 +680,7 @@ function renderDynamicDataInPanel(qid) {
     }
   }
 
-  let tautanTambah = `<p><a href="${wikiBaseUrl}" target="_blank" class="sunting-linktambah" title="Tambahkan data di Wikidata" style="font-style: italic;">Lengkapi data di Wikidata!</a></p>`;
+  let tautanTambah = `<p><a href="${wikiBaseUrl}" target="_blank" class="sunting-linktambah text-italic" title="Tambahkan data di Wikidata">Lengkapi data di Wikidata!</a></p>`;
   html += tautanTambah;
 
   container.insertAdjacentHTML('beforebegin', html);
@@ -726,8 +691,8 @@ function renderDynamicDataInPanel(qid) {
     
     if (arsipContainer) {
       let wikibooksHtml = `
-        <div style="margin-top:10px;">
-          <h2 style="margin-bottom: 7px;">Resep & Panduan</h2>
+        <div class="mt-10">
+          <h2 class="mb-7">Resep & Panduan</h2>
           <p class="wikipedia-link">
             <a href="${urlWikibooks}" target="_blank">
               <img src="img/wikibook_tiny_logo.png" alt="" />
@@ -857,9 +822,9 @@ function generateFilterSelect() {
     selectKombinasi.value = 'default';
     
     if (currentKategoriUtama === 'alam') {
-      selectKombinasi.style.display = 'none';
+      selectKombinasi.classList.add('d-none');
     } else {
-      selectKombinasi.style.display = ''; 
+      selectKombinasi.classList.remove('d-none'); 
     }
   }
 
@@ -894,9 +859,6 @@ function generateFilterSelect() {
   
   if (!isFilterEventAttached) {
     selectRegion.addEventListener('change', function() {
-      // ========================================================
-      // 🛑 REM DARURAT: Hancurkan proses GPS yang sedang berjalan
-      // ========================================================
       if (window.TombolGPSMap) window.TombolGPSMap.stop();
       Map.off('locationfound');
       Map.off('locationerror');
@@ -906,12 +868,9 @@ function generateFilterSelect() {
         userRadiusCircle = null;
       }
       
-      // Kembalikan teks opsi jika sebelumnya nyangkut di "⏳ Mencari..."
       let opsiTerdekat = Array.from(this.options).find(opt => opt.value === 'terdekat');
       if (opsiTerdekat) opsiTerdekat.text = "Sekitar Anda (Radius 10 km)";
-      // ========================================================
 
-      // Baru jalankan logika sesuai pilihan
       if (this.value === 'terdekat') {
         jalankanFilterGPS(this);
       } else {
@@ -927,7 +886,7 @@ function generateFilterSelect() {
   currentUsiaFilter = 'all'; 
 
   if (pilihan === 'filter-usia-muda-50') {
-    currentUsiaFilter = 'muda_50';          // BARU
+    currentUsiaFilter = 'muda_50';         
   } else if (pilihan === 'filter-usia-50') {
     currentUsiaFilter = 'usia_50'; 
   } else if (pilihan === 'filter-usia-100') {
@@ -1006,9 +965,6 @@ function generateFilterSelect() {
 }
 
 function updateFeatureCounts(totalValidRecords) {
-  let btnAll = document.getElementById('btn-all');
-  let btnImg = document.getElementById('btn-image') || document.querySelector('[data-filter="image"]');
-  let btnArt = document.getElementById('btn-article') || document.querySelector('[data-filter="article"]');
   let searchInput = document.getElementById('search-input');
   if (searchInput) {
     searchInput.placeholder = `Menampilkan ${totalValidRecords} hasil (atau ketik yang ingin dicari)`;
@@ -1018,7 +974,6 @@ function updateFeatureCounts(totalValidRecords) {
 function applyIntersectionFilter(preventZoom = false) {
   if (!PrimaryDataIsLoaded) return;
 if (Map) Map.stop();
-  // 2. +++ TAMBAHAN BARU: Bunuh timer terbang dari sidebar jika sedang berjalan +++
   if (typeof flightDebounceToken !== 'undefined' && flightDebounceToken) {
     clearTimeout(flightDebounceToken);
   }
@@ -1081,7 +1036,7 @@ if (Map) Map.stop();
     }
 
   let matchUsia = true;
-if (currentUsiaFilter !== 'all') {                 // ganti dari .startsWith('usia_')
+if (currentUsiaFilter !== 'all') {                 
   if (record.rawTahunBerdiri) {
     let tahunBangunan = parseInt(record.rawTahunBerdiri.substring(0, 4));
     let [tipeFilter, umurStr] = currentUsiaFilter.split('_');
@@ -1089,9 +1044,9 @@ if (currentUsiaFilter !== 'all') {                 // ganti dari .startsWith('us
     let batasTahun = new Date().getFullYear() - batasUmur;
 
     if (tipeFilter === 'muda') {
-      matchUsia = tahunBangunan > batasTahun;      // lebih muda dari X tahun
+      matchUsia = tahunBangunan > batasTahun;      
     } else {
-      matchUsia = tahunBangunan <= batasTahun;     // perilaku lama: lebih tua dari X tahun
+      matchUsia = tahunBangunan <= batasTahun;     
     }
   } else {
     matchUsia = false; 
@@ -1126,7 +1081,6 @@ validRecords.forEach(record => {
   });
 
   if (validMarkers.length > 0) {
-    // Eksekusi langsung tanpa ditunda (tanpa setTimeout/debounce)
     Cluster.addLayers(validMarkers);
     if (!preventZoom) {
       Map.flyToBounds(Cluster.getBounds(), { duration: 0.5 });
@@ -1149,15 +1103,15 @@ function generateRecordDetails(qid) {
   } else {
     let namaAmanURL = encodeURIComponent(record.title);
     let gFormUrl = `https://docs.google.com/forms/d/e/1FAIpQLSeHMSn6cwcgbZ0xx1CJ5tGXDQacYgzRZUG51STByKUROWXgmg/viewform?usp=pp_url&entry.2138396049=${namaAmanURL}`;
-    articleHtml = `<div class="article main-text nodata"><p>${currentNamaKlaster} ini belum memiliki artikel. <a href="${gFormUrl}" target="_blank" rel="noopener noreferrer" class="sunting-linktambah">Tambahkan!</a></p></div>`;
+    articleHtml = `<div class="article main-text nodata"><p>${currentNamaKlaster} ini belum memiliki artikel. <a href="${gFormUrl}" target="_blank" rel="noopener noreferrer" class="sunting-linktambah no-border">Tambahkan!</a></p></div>`;
   }
   
   let wikiUrlUtama = `https://www.wikidata.org/wiki/${qid}`;
   let tautanSuntingRingkasan = `<a href="${wikiUrlUtama}" target="_blank" class="sunting-link" title="Sunting data di Wikidata" aria-label="Sunting data di Wikidata"></a>`;
 
-  let designationsHtml = `<h2 style="margin-top:10px;display: flex;align-items: flex-start; justify-content: space-between;">
-                            <div><span id="header-text-${qid}" style="margin-right:7px;">Informasi</span>${tautanSuntingRingkasan}</div>
-                         </h2>`;
+  let designationsHtml = `<h2 class="header-flex">
+                            <div><span id="header-text-${qid}" class="mr-7">Informasi</span>${tautanSuntingRingkasan}</div>
+                          </h2>`;
 
   designationsHtml += '<ul class="designations">';
 
@@ -1184,10 +1138,6 @@ function generateRecordDetails(qid) {
     }
   }
 
-  // ==========================================
-  // LOGIKA 'TERLETAK' & 'DIDIRIKAN' BERDASARKAN currentNamaKlaster
-  // (Pencocokan persis dengan Teks Option HTML)
-  // ==========================================
   let prefixLokasi = 'Letak'; 
   let showTahun = true; 
   let prefixTahun = 'Didirikan';
@@ -1239,7 +1189,7 @@ function generateRecordDetails(qid) {
   } else {
     infoLokasiHtml = 
       `<p class="koordinat-link">${prefixLokasi}: ${namaLokasi}</p>` +
-      `<p>Koordinat: <span style="font-style: italic; color: #888;">Data belum tersedia</span></p>`;
+      `<p>Koordinat: <span class="text-muted-italic">Data belum tersedia</span></p>`;
   }
 
   let infoTahunHtml = '';
@@ -1247,17 +1197,17 @@ function generateRecordDetails(qid) {
     if (record.tahunBerdiri) {
       infoTahunHtml = `<p>${prefixTahun}: ${record.tahunBerdiri}</p>`;
     } else {
-      infoTahunHtml = `<p>${prefixTahun}: <span style="font-style: italic; color: #888;">Data belum tersedia</span></p>`;
+      infoTahunHtml = `<p>${prefixTahun}: <span class="text-muted-italic">Data belum tersedia</span></p>`;
     }
   }
 
   let eventsHtmlPlaceholder = `
    <div id="events-container-${qid}" class="loading">
-     <div class="loader" style="width: 20px; height: 20px; border-width: 2px; margin-top: 2px;"></div>
+     <div class="loader loader-small mt-8"></div>
    </div>`;
 
   designationsHtml += '<li>' + infoLokasiHtml + infoTahunHtml + eventsHtmlPlaceholder + '</li></ul>';
-  let arsipHtml = `<div id="arsip-container-${qid}" class="loading"><div class="loader" style="width: 20px; height: 20px; border-width: 2px; margin-top: 8px;"></div></div>`;
+  let arsipHtml = `<div id="arsip-container-${qid}" class="loading"><div class="loader loader-small mt-8"></div></div>`;
 
   let panelElem = document.createElement('div');
   
@@ -1339,7 +1289,7 @@ function renderHistoricalImagesInPanel(qid) {
   let html = '';
   
   function buildImageBlock(imgObj, teksPengganti) {
-    let block = '<div class="arsip-block" style="overflow: hidden;">';
+    let block = '<div class="arsip-block">';
     block += generateFigure(imgObj.file);
     if (imgObj.caption && imgObj.caption.trim() !== '') {
       block += `<div class="article main-text"><p>${imgObj.caption}</p></div>`;
@@ -1365,9 +1315,9 @@ function renderHistoricalImagesInPanel(qid) {
   }
 
   if (record.commonsCat) {
-    html += '<h2 style="margin-top:10px; margin-bottom: 7px;">Galeri lainnya</h2>';
+    html += '<h2 class="mt-10 mb-7">Galeri lainnya</h2>';
     html += 
-      '<p class="wikipedia-link" style="margin-bottom: 0;">' +
+      '<p class="wikipedia-link mb-0">' +
         `<a href="https://commons.wikimedia.org/wiki/Category:${encodeURIComponent(record.commonsCat)}" target="_blank">` +
           '<img src="img/wikicommons_tiny_logo.png" alt="" />' +
           '<span>Lihat di Wikimedia Commons</span>' +
@@ -1381,7 +1331,7 @@ function renderHistoricalImagesInPanel(qid) {
     
     let judulGaleriUtama = '';
     if (record.pastImage || record.interiorImage || (record.vicinityImages && record.vicinityImages.length > 0)) {
-      judulGaleriUtama = `<h2 style="margin-top:10px;margin-bottom:10px;">Galeri ${tautanSuntingGaleri}</h2>`;
+      judulGaleriUtama = `<h2 class="mt-10 mb-10">Galeri ${tautanSuntingGaleri}</h2>`;
     }
     
     container.innerHTML = judulGaleriUtama + html;
@@ -1389,7 +1339,7 @@ function renderHistoricalImagesInPanel(qid) {
   } else {
     container.innerHTML = '';
     container.classList.remove('loading');
-    container.style.display = 'none';
+    container.classList.add('d-none');
   }
 }
 
@@ -1445,7 +1395,7 @@ function displayArticleExtract(title, elem) {
       }
       console.error('Gagal memuat artikel Wikipedia:', error);
       if (elem) {
-        elem.innerHTML = '<p class="nodata" style="color:#cc0000; margin-top:10px;">Gagal memuat ringkasan artikel. Periksa koneksi internet Anda.</p>';
+        elem.innerHTML = '<p class="nodata text-error mt-10">Gagal memuat ringkasan artikel. Periksa koneksi internet Anda.</p>';
         elem.classList.remove('loading');
       }
     });
@@ -1462,7 +1412,7 @@ function renderNextChunk() {
 
   nextBatch.forEach(record => {
     if (record.indexLi) {
-      record.indexLi.style.display = '';
+      record.indexLi.classList.remove('d-none'); 
       fragment.appendChild(record.indexLi);
     }
   });
@@ -1497,6 +1447,9 @@ function queryOsm(qid) {
       let geoJson = osmtogeojson(data);
       if (!geoJson || geoJson.features.length === 0) return;
       
+      // CATATAN: style Leaflet di bawah ini BUKAN inline CSS HTML, 
+      // melainkan "objek konfigurasi data Leaflet" untuk API render canvas mereka.
+      // Jadi tidak dipindah ke kelas CSS.
       let shapeLayer = L.geoJSON(geoJson, {
         style: { color: '#ff3333', opacity: 0.7, fill: true },
         filter: feature => feature.geometry.type !== 'Point',
