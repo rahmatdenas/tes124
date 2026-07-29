@@ -488,6 +488,7 @@ try {
       }
       // ++++++++++++++++++++++++++++++++++++++++
     }
+  isFetching = false;
   } catch (error) {
   isFetching = false;
     if (error === 'ABORTED' || (error && error.name === 'AbortError')) {
