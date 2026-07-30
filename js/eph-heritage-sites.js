@@ -1413,12 +1413,29 @@ function renderNextChunk() {
   let nextBatch = currentFilteredRecords.slice(currentRenderIndex, currentRenderIndex + CHUNK_SIZE);  
   if (nextBatch.length === 0) return;
   
-  let fragment = document.createDocumentFragment();
-  let isGalleryMode = activeFeatures.has('image'); // Cek apakah filter gambar aktif
+  let isGalleryMode = activeFeatures.has('image'); 
 
-  nextBatch.forEach(record => {
-    if (isGalleryMode) {
-      // --- MODE GALERI ---
+  if (isGalleryMode) {
+    // 1. Buat dua kolom nyata jika belum ada di dalam index-list
+    let colKiri = ol.querySelector('#kolom-kiri');
+    let colKanan = ol.querySelector('#kolom-kanan');
+    
+    if (!colKiri || !colKanan) {
+      ol.innerHTML = ''; // Pastikan bersih
+      colKiri = document.createElement('div');
+      colKiri.id = 'kolom-kiri';
+      colKiri.className = 'kolom-masonry';
+      
+      colKanan = document.createElement('div');
+      colKanan.id = 'kolom-kanan';
+      colKanan.className = 'kolom-masonry';
+      
+      ol.appendChild(colKiri);
+      ol.appendChild(colKanan);
+    }
+
+    // 2. Distribusikan ganjil-genap
+    nextBatch.forEach((record, index) => {
       if (!record.galleryLi) {
         let li = document.createElement('li');
         li.className = 'gallery-item';
@@ -1434,18 +1451,29 @@ function renderNextChunk() {
       }
       
       record.galleryLi.classList.remove('d-none');
-      fragment.appendChild(record.galleryLi);
+      
+      // Masukkan ke kiri atau kanan berdasarkan urutan
+      // (index keseluruhan agar stabil saat scroll batch berikutnya)
+      let globalIndex = currentRenderIndex + index;
+      if (globalIndex % 2 === 0) {
+        colKiri.appendChild(record.galleryLi);
+      } else {
+        colKanan.appendChild(record.galleryLi);
+      }
+    });
 
-    } else {
-      // --- MODE LIST NORMAL ---
+  } else {
+    // --- MODE LIST NORMAL ---
+    let fragment = document.createDocumentFragment();
+    nextBatch.forEach(record => {
       if (record.indexLi) {
         record.indexLi.classList.remove('d-none'); 
         fragment.appendChild(record.indexLi);
       }
-    }
-  });
+    });
+    ol.appendChild(fragment);
+  }
 
-  ol.appendChild(fragment);
   currentRenderIndex += CHUNK_SIZE; 
 }
 
