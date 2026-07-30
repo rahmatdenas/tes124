@@ -311,7 +311,7 @@ if (klaster === 'Wilayah Administratif') {
   // ==========================================
   // BLOK 1: PENEMUAN ARKEOLOGI
   // ==========================================
-  if (['Prasasti', 'Situs arkeologi', 'Artefak'].includes(klaster)) {
+  if (['Prasasti', 'Situs arkeologi lainnya', 'Artefak'].includes(klaster)) {
     selectClause += `(SAMPLE(?tglTemuData) AS ?tglTemu) (SAMPLE(?tempatTemuLabel) AS ?tempatTemu) `;
     whereClause += `
       OPTIONAL {
@@ -488,7 +488,7 @@ else if (klaster === 'Tempat lahir tokoh') {
     whereClause += `OPTIONAL { ?site wdt:P4552 ?gunungItem . ?gunungItem rdfs:label ?gunungLabel . FILTER(LANG(?gunungLabel) = "id") }`;
   }
   
-  if (['Gempa bumi', 'Bencana lainnya', 'Peristiwa lainnya', 'Perang & konflik'].includes(klaster)) {
+  if (['Gempa bumi dan tsunami', 'Bencana lainnya', 'Peristiwa lainnya', 'Perang & konflik'].includes(klaster)) {
     selectClause += `(SAMPLE(?korbanVal) AS ?korban) `;
     whereClause += `OPTIONAL { ?site wdt:P1120 ?korbanVal . }`;
   }
