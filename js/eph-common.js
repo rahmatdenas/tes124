@@ -654,7 +654,6 @@ function processHashChange() {
           lastValidHash = 'landing';
           history.replaceState(null, null, window.location.pathname);
           resetApp();
-          resetFormWilayah(); 
           document.title = 'Mulai – ' + BASE_TITLE;
           displayPanelContent('landing');
           updateNavigationUI(''); 
