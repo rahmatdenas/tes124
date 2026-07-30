@@ -120,9 +120,6 @@ background-image: linear-gradient(to bottom, #9b0d0b, #550303);
     font-size: 13px;
   }
 
-  #filter-features {
-    padding-top: 10px;
-  }
 
   .feat-btn {
     flex: 1 1 auto;
