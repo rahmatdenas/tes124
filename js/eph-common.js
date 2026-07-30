@@ -1262,19 +1262,3 @@ window.addEventListener('pageshow', function(e) {
   if (typeof aturTampilanWilayah === 'function') aturTampilanWilayah();
 });
 
-function resetFormWilayah() {
-  let kategoriWilayah = document.getElementById('kategori-wilayah-utama');
-  if (kategoriWilayah) {
-    kategoriWilayah.value = 'provinsi';
-    if (typeof aturTampilanWilayah === 'function') aturTampilanWilayah();
-  }
-  
-  let provinsiInput = document.getElementById('provinsi-input');
-  if (provinsiInput) provinsiInput.value = 'wd:Q1823';
-
-  let benuaInput = document.getElementById('benua-input');
-  if (benuaInput) {
-    benuaInput.value = 'eropa';
-    if (typeof filterNegaraByBenua === 'function') filterNegaraByBenua();
-  }
-}
