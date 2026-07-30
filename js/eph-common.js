@@ -401,8 +401,8 @@ Cluster = new L.markerClusterGroup({
     if (z === 17) return 20;
     return 10; 
   },
-  zoomToBoundsOnClick: true, 
-  spiderfyOnMaxZoom: true    
+  zoomToBoundsOnClick: false, 
+  spiderfyOnMaxZoom: false    
 }).addTo(Map);
 
 Cluster.on('clusterclick', function (a) {
@@ -416,14 +416,20 @@ Cluster.on('clusterclick', function (a) {
 
   if (currentZoom >= maxZoom || isSamePoint) {
     if (count > 60) {
-      cluster.unspiderfy(); 
-      
+      // TIDAK PERLU cluster.unspiderfy() lagi karena dia otomatis diam.
+      // Langsung munculkan dialog saja
       tampilkanDialog(
         `Terlalu banyak data di titik ini (<b>${count} item</b>).<br><br>Untuk melihatnya, silakan buka daftar indeks dan persempit pencarian wilayah.`, 
         "alert", 
         "Titik Terlalu Padat"
       );
+    } else {
+      // WAJIB ADA: Agar titik <= 60 tetap bisa mekar saat diklik
+      cluster.spiderfy();
     }
+  } else {
+    // WAJIB ADA: Agar saat diklik dari jauh, kamera peta nge-zoom
+    Map.fitBounds(cluster.getBounds());
   }
 });
 }
