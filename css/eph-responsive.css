@@ -132,12 +132,21 @@ background-image: linear-gradient(to bottom, #9b0d0b, #550303);
   }
 
   /* ---------- Daftar indeks: target sentuh lebih besar ---------- */
-  #index-list li a {
-         margin: 0 20px;
+     #index-list li a {
+         margin: 0 15px;
     padding: 10px 0;
     font-size: 13.5px;
     line-height: 20px;
   }
+
+#search-input {
+  padding: 10px 15px 15px; 
+  background-position: calc(100% - 10px) calc(50% - 3px);
+}
+
+#index header {
+    padding: 15px 15px;
+}
 
   /* ---------- Panel detail ---------- */
   #details,
