@@ -819,3 +819,54 @@ select option:disabled {
 .my-15 { margin-top: 15px; margin-bottom: 15px; }
 .pt-15 { padding-top: 15px; }
 .ml-0 { margin-left: 0px !important; }
+
+
+
+/* ==========================================================================
+   CSS KHUSUS MODE GALERI (Masonry Layout)
+   ========================================================================== */
+
+/* 1. Pengaturan Wadah Utama Galeri */
+#index-list.mode-galeri {
+  column-count: 2; /* 2 kolom untuk HP */
+  column-gap: 15px;
+  padding: 12px 12px 0; /* Padding bawah (24px) dilegakan agar tidak mepet */
+  }
+
+
+/* 2. Reset <li> Bawaan */
+#index-list.mode-galeri li {
+  break-inside: avoid; /* Mencegah gambar terpotong beda kolom */
+  /* fix bleeding bug */
+  padding-bottom: 15px; 
+}
+#index-list.mode-galeri li a {background:#FFF;}
+#index-list.mode-galeri li a:hover { background: #882222;color: #ffffff;}
+
+#index-list.mode-galeri li:hover { background:transparent;}
+
+/* 3. Pindahkan Desain Kartu ke <a> (Agar 100% area bisa diklik) */
+#index-list.mode-galeri li a.gallery-link {
+  /* Reset margin dan border dari CSS list bawaan Anda */
+  margin: 0; 
+  padding: 0;
+  line-height: normal;
+  /* Desain Visual Kartu */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+/* 4. Pengaturan Gambar */
+#index-list.mode-galeri li a.gallery-link img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 5. Pengaturan Teks Judul */
+#index-list.mode-galeri li a.gallery-link .gallery-caption {
+  padding: 8px 8px 10px;
+  font-size: 11px; /* Samakan dengan ukuran teks list bawaan Anda */
+    font-weight: 600;
+  text-align: center;
+}
