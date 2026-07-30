@@ -466,7 +466,7 @@ if (klaster === 'Media massa') {
       }
     `;
   }
-else if (klaster === 'Tokoh') {
+else if (klaster === 'Tempat lahir tokoh') {
     selectClause += `(SAMPLE(?wafatData) AS ?tglWafat) (GROUP_CONCAT(DISTINCT ?kerjaLabel; separator=", ") AS ?pekerjaanList) (GROUP_CONCAT(DISTINCT ?ahliLabel; separator=", ") AS ?spesialisasiList) (GROUP_CONCAT(DISTINCT ?koleksiKaryaLabel; separator=", ") AS ?koleksiKaryaList) `;
     whereClause += `
       OPTIONAL {
