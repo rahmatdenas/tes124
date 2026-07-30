@@ -145,9 +145,6 @@ background-image: linear-gradient(to bottom, #9b0d0b, #550303);
     padding: 15px 15px;
 }
 
-   .grid-3-col {
-      gap: 10px;
-   }
 
   /* ---------- Panel detail ---------- */
   #details,
