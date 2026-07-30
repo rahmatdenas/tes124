@@ -295,7 +295,10 @@ function resetApp() {
   }
 
   let indexList = document.getElementById('index-list');
-  if (indexList) indexList.innerHTML = '';
+if (indexList) {
+    indexList.innerHTML = '';
+    indexList.classList.remove('mode-galeri'); // Pastikan class terhapus saat reset
+  }
 
 
   let selectRegion = document.getElementById('filter-region');
