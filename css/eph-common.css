@@ -831,7 +831,7 @@ select option:disabled {
   flex-direction: row;
   align-items: flex-start; /* Agar kolom tidak dipaksa sama tinggi */
   gap: 15px;
-  padding: 12px 12px 0;
+  padding: 12px;
 }
 
 /* Desain untuk 2 sub-kolom nyata */
