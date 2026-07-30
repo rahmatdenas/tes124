@@ -998,7 +998,7 @@ if (Map) Map.stop();
       btnAll.textContent = 'Semua Hasil'; 
     } else {
       btnAll.classList.remove('active');
-      btnAll.textContent = 'Segarkan'; 
+      btnAll.textContent = 'Pulihkan'; 
     }
   }
 
