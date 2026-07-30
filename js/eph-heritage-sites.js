@@ -980,7 +980,12 @@ if (Map) Map.stop();
   Cluster.clearLayers();
   let ol = document.getElementById('index-list');
   ol.innerHTML = '';
-
+// --- TAMBAHAN KODE MODE GALERI ---
+  if (activeFeatures.has('image')) {
+    ol.classList.add('mode-galeri');
+  } else {
+    ol.classList.remove('mode-galeri');
+  }
   let validMarkers = [];
   
   let btnAll = document.getElementById('btn-all');
@@ -1409,11 +1414,34 @@ function renderNextChunk() {
   if (nextBatch.length === 0) return;
   
   let fragment = document.createDocumentFragment();
+  let isGalleryMode = activeFeatures.has('image'); // Cek apakah filter gambar aktif
 
   nextBatch.forEach(record => {
-    if (record.indexLi) {
-      record.indexLi.classList.remove('d-none'); 
-      fragment.appendChild(record.indexLi);
+    if (isGalleryMode) {
+      // --- MODE GALERI ---
+      if (!record.galleryLi) {
+        let li = document.createElement('li');
+        li.className = 'gallery-item';
+        let imgUrl = `${COMMONS_WIKI_URL_PREF}Special:FilePath/${encodeURIComponent(record.imageFilename)}?width=300`;
+        
+        li.innerHTML = `
+          <a href="#${record.id}" class="gallery-link">
+            <img src="${imgUrl}" loading="lazy" alt="${record.title}">
+            <div class="gallery-caption">${record.indexTitle}</div>
+          </a>
+        `;
+        record.galleryLi = li;
+      }
+      
+      record.galleryLi.classList.remove('d-none');
+      fragment.appendChild(record.galleryLi);
+
+    } else {
+      // --- MODE LIST NORMAL ---
+      if (record.indexLi) {
+        record.indexLi.classList.remove('d-none'); 
+        fragment.appendChild(record.indexLi);
+      }
     }
   });
 
@@ -1490,6 +1518,7 @@ class Record {
     this.designations = {}; 
     this.panelElem = undefined;
     this.indexLi = undefined;
+    this.galleryLi = undefined;
     this.tahunBerdiri = undefined;
     this.rawTahunBerdiri = undefined;
     this.events = [];
